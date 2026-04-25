@@ -53,10 +53,24 @@
         </div>
         <div class="header_btm">
             <div class="hbtm_left">
-                <div class="hbtm_left1">
-                    <i class="fa-solid fa-bars-staggered"></i>
-                    <p>All Category</p>
-                </div>
+                <div class="hbtm_left1 nav-item--categories" id="categoryTrigger">
+  <button class="nav-btn categories-btn" aria-haspopup="true" aria-expanded="false" aria-controls="megaMenu">
+    <i class="fa-solid fa-bars-staggered"></i>
+    <p>All Category</p>
+  </button>
+
+  <!-- LE MEGA MENU VIENT ICI — copie-colle ce bloc entier -->
+  <div class="mega-menu" id="megaMenu" role="dialog" aria-label="Catégories" inert>
+    <div class="mega-menu__inner">
+      <aside class="mega-menu__sidebar">
+        <p class="sidebar__label">Toutes les catégories</p>
+        <ul class="sidebar__list" role="list"></ul>
+      </aside>
+      <div class="mega-menu__content"></div>
+    </div>
+  </div>
+
+</div>
                 <div class="hbtm_left1">
                     <p>Get a Services</p>
                 </div>
@@ -83,6 +97,19 @@
             </div>
         </div>
     </header>
-    
+  <div class="mega-menu-backdrop" id="menuBackdrop"></div>
+  <div id="product-grid-home"
+     data-pg-source="mock"
+     data-pg-limit="24">
+  </div>
+  <!--produit avec recomandation personaliser
+    <div id="product-grid-home"
+     data-pg-source="mock"
+     data-pg-limit="24"
+     data-pg-personalized="true">
+    </div>-->
+
+  <script src="assets/js/mega-menu.js"></script>
+  <script src="assets/js/modules/product-grid.js"></script>
 </body>
 </html>
