@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Services — Avena</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--accent:#4361ee;--accent-light:#eef0fd;--accent-dark:#3451d1;--bg:#f4f6fb;--surface:#fff;--border:#e2e6f3;--text:#1a1d2e;--muted:#7a7f9a;--success:#38a169;--radius:14px;--font-h:'Sora',sans-serif;--font-b:'DM Sans',sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-b);background:var(--bg);color:var(--text)}
+    a{text-decoration:none;color:inherit}
+    .page-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+    .page-bar__brand{font-family:var(--font-h);font-weight:800;font-size:1.1rem;color:var(--accent)}
+    .btn{padding:9px 18px;border-radius:9px;font-size:.85rem;font-weight:600;font-family:var(--font-h);cursor:pointer;border:none;transition:all .2s}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-dark)}
+    .btn-ghost{background:none;color:var(--accent);border:1.5px solid var(--accent)}.btn-ghost:hover{background:var(--accent-light)}
+    .page-wrap{max-width:1280px;margin:0 auto;padding:32px 24px}
+    .services-hero{background:linear-gradient(135deg,#2d3748 0%,var(--accent) 100%);border-radius:var(--radius);padding:48px 40px;margin-bottom:32px;color:#fff;position:relative;overflow:hidden}
+    .services-hero::after{content:'🛠️';position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:6rem;opacity:.2}
+    .services-hero h1{font-family:var(--font-h);font-size:2rem;font-weight:800;margin-bottom:8px}
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+    .filter-chip{padding:7px 16px;border-radius:99px;border:1.5px solid var(--border);font-size:.82rem;font-weight:600;font-family:var(--font-h);cursor:pointer;background:var(--surface);color:var(--muted);transition:all .2s}
+    .filter-chip.active,.filter-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .filter-search{margin-left:auto;padding:8px 16px;border:1.5px solid var(--border);border-radius:99px;font-family:var(--font-b);font-size:.85rem;outline:none;width:220px;transition:border-color .2s}
+    .filter-search:focus{border-color:var(--accent)}
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+    .svc-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;transition:transform .22s,box-shadow .22s;display:flex;flex-direction:column;cursor:pointer}
+    .svc-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(67,97,238,.13)}
+    .svc-card__img-wrap{overflow:hidden;aspect-ratio:3/2}
+    .svc-card__img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+    .svc-card:hover .svc-card__img{transform:scale(1.05)}
+    .svc-card__body{padding:16px;flex:1;display:flex;flex-direction:column;gap:8px}
+    .svc-card__cat{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-family:var(--font-h)}
+    .svc-card__title{font-family:var(--font-h);font-weight:700;font-size:.95rem;line-height:1.35}
+    .svc-card__provider{font-size:.78rem;color:var(--muted)}
+    .svc-card__stars{color:#f5a623;font-size:.82rem}
+    .svc-card__footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px;border-top:1px solid var(--border)}
+    .svc-card__price{font-family:var(--font-h);font-weight:700;font-size:.9rem;color:var(--accent)}
+    .svc-card__delivery{font-size:.72rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+<nav class="page-bar">
+  <span class="page-bar__brand">Avena — Services</span>
+  <div style="display:flex;gap:8px">
+    <a href="service-create.html" class="btn btn-primary">+ Offer a Service</a>
+    <a href="../../index.html" class="btn btn-ghost">← Home</a>
+  </div>
+</nav>
+<div class="page-wrap">
+  <div class="services-hero">
+    <h1>Student Services</h1>
+    <p>Find skills and expertise from students across your campus.</p>
+  </div>
+  <div class="filters">
+    <button class="filter-chip active" data-filter="all">All</button>
+    <button class="filter-chip" data-filter="IT">IT</button>
+    <button class="filter-chip" data-filter="Medicine">Medicine</button>
+    <button class="filter-chip" data-filter="Finance">Finance</button>
+    <button class="filter-chip" data-filter="Arts">Arts</button>
+    <button class="filter-chip" data-filter="Sport">Sport</button>
+    <input class="filter-search" id="searchInput" type="search" placeholder="Search services…"/>
+  </div>
+  <div class="svc-grid" id="svcGrid"></div>
+</div>
+<script src="../../assets/js/modules/auth.js"></script>
+<script src="../../assets/js/modules/services.js"></script>
+<script>
+(function(){
+  const grid=document.getElementById('svcGrid');
+  const chips=document.querySelectorAll('.filter-chip');
+  const search=document.getElementById('searchInput');
+  let all=[], activeFilter='all';
+
+  function renderCard(s){
+    return `<a class="svc-card" href="service.html?id=${s.id}">
+      <div class="svc-card__img-wrap">
+        <img class="svc-card__img" src="${s.coverImage}" alt="${s.title}" loading="lazy"
+          onerror="this.src='https://placehold.co/600x400/4361ee/fff?text=Service'"/>
+      </div>
+      <div class="svc-card__body">
+        <span class="svc-card__cat">${s.category}</span>
+        <h2 class="svc-card__title">${s.title}</h2>
+        <span class="svc-card__provider">by ${s.provider?.name}</span>
+        <span class="svc-card__stars">${Services.buildStars(s.rating)} (${s.reviews})</span>
+        <div class="svc-card__footer">
+          <span class="svc-card__price">${Services.formatPrice(s)}</span>
+          <span class="svc-card__delivery">${Services.formatDelivery(s.deliveryDays)}</span>
+        </div>
+      </div>
+    </a>`;
+  }
+
+  function applyFilters(){
+    const q=search.value.toLowerCase().trim();
+    let list=all;
+    if(activeFilter!=='all') list=list.filter(s=>s.category===activeFilter);
+    if(q) list=list.filter(s=>s.title.toLowerCase().includes(q)||s.description.toLowerCase().includes(q));
+    grid.innerHTML=list.length?list.map(renderCard).join(''):'<p style="color:var(--muted);padding:40px;grid-column:1/-1;text-align:center">No services found.</p>';
+  }
+
+  chips.forEach(c=>c.addEventListener('click',()=>{
+    chips.forEach(x=>x.classList.remove('active'));c.classList.add('active');
+    activeFilter=c.dataset.filter;applyFilters();
+  }));
+  search.addEventListener('input',applyFilters);
+
+  Services.getAll().then(list=>{all=list;applyFilters();});
+})();
+</script>
+</body>
+</html>

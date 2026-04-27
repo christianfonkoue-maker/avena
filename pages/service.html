@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Service — Avena</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--accent:#4361ee;--accent-light:#eef0fd;--bg:#f4f6fb;--surface:#fff;--border:#e2e6f3;--text:#1a1d2e;--muted:#7a7f9a;--success:#38a169;--radius:14px;--font-h:'Sora',sans-serif;--font-b:'DM Sans',sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-b);background:var(--bg);color:var(--text)}a{text-decoration:none;color:inherit}
+    .page-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+    .page-bar__brand{font-family:var(--font-h);font-weight:800;font-size:1.1rem;color:var(--accent)}
+    .btn{padding:9px 18px;border-radius:9px;font-size:.85rem;font-weight:600;font-family:var(--font-h);cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:var(--accent);color:#fff;width:100%;justify-content:center;box-shadow:0 2px 10px rgba(67,97,238,.25)}.btn-primary:hover{filter:brightness(.9)}
+    .btn-ghost{background:none;color:var(--accent);border:1.5px solid var(--accent)}.btn-ghost:hover{background:var(--accent-light)}
+    .page-wrap{max-width:900px;margin:0 auto;padding:32px 24px}
+    .svc-img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:var(--radius);margin-bottom:24px}
+    .svc-layout{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start}
+    @media(max-width:680px){.svc-layout{grid-template-columns:1fr}}
+    .svc-cat{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-family:var(--font-h)}
+    .svc-title{font-family:var(--font-h);font-size:1.6rem;font-weight:800;line-height:1.25;margin:6px 0 16px}
+    .svc-desc{line-height:1.7;font-size:.95rem;margin-bottom:20px}
+    .provider-box{display:flex;align-items:center;gap:12px;padding:14px;background:var(--accent-light);border-radius:10px}
+    .provider-avatar{width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-h);font-weight:700;font-size:1.1rem;flex-shrink:0}
+    .provider-name{font-family:var(--font-h);font-weight:700;font-size:.9rem}
+    .provider-uni{font-size:.78rem;color:var(--muted)}
+    .sidebar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:14px;position:sticky;top:80px}
+    .sidebar-price{font-family:var(--font-h);font-size:1.5rem;font-weight:800;color:var(--accent)}
+    .sidebar-stat{display:flex;justify-content:space-between;font-size:.84rem;padding:8px 0;border-bottom:1px solid var(--border)}
+    .sidebar-stat span:first-child{color:var(--muted)}
+    .sidebar-stat span:last-child{font-weight:600}
+    .stars{color:#f5a623}
+    .alert{padding:12px 14px;border-radius:10px;font-size:.86rem;display:none;margin-top:4px}
+    .alert.show{display:block}
+    .alert--success{background:#f0fff4;color:var(--success);border:1px solid #c6f6d5}
+    .alert--info{background:var(--accent-light);color:var(--accent);border:1px solid #c3cffa}
+  </style>
+</head>
+<body>
+<nav class="page-bar">
+  <span class="page-bar__brand">Avena — Service</span>
+  <a href="get-services.html" class="btn btn-ghost" style="padding:7px 14px;font-size:.82rem">← All Services</a>
+</nav>
+<div class="page-wrap" id="pageWrap"><p style="color:var(--muted);text-align:center;padding:60px">Loading…</p></div>
+<script src="../../assets/js/modules/auth.js"></script>
+<script src="../../assets/js/modules/services.js"></script>
+<script src="../../assets/js/modules/messaging.js"></script>
+<script>
+(function(){
+  const id=new URLSearchParams(location.search).get('id');
+  const wrap=document.getElementById('pageWrap');
+  const user=Session.get();
+  if(!id){wrap.innerHTML='<p style="color:red;text-align:center">No service ID.</p>';return;}
+  Services.getById(id).then(svc=>{
+    if(!svc){wrap.innerHTML='<p style="color:red;text-align:center">Service not found.</p>';return;}
+    document.title=`${svc.title} — Avena`;
+    const initials=(svc.provider?.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    wrap.innerHTML=`
+      <img class="svc-img" src="${svc.coverImage}" alt="${svc.title}" onerror="this.src='https://placehold.co/600x400/4361ee/fff?text=Service'"/>
+      <div class="svc-layout">
+        <div>
+          <div class="svc-cat">${svc.category}${svc.subcategory?' · '+svc.subcategory:''}</div>
+          <h1 class="svc-title">${svc.title}</h1>
+          <p class="svc-desc">${svc.description}</p>
+          <div class="provider-box">
+            <div class="provider-avatar">${initials}</div>
+            <div><div class="provider-name">${svc.provider?.name}</div><div class="provider-uni">${svc.provider?.university}</div></div>
+          </div>
+        </div>
+        <aside>
+          <div class="sidebar-card">
+            <div class="sidebar-price">${Services.formatPrice(svc)}</div>
+            <div class="sidebar-stat"><span>Delivery</span><span>${Services.formatDelivery(svc.deliveryDays)}</span></div>
+            <div class="sidebar-stat"><span>Rating</span><span class="stars">${Services.buildStars(svc.rating)} (${svc.reviews})</span></div>
+            <button class="btn btn-primary" id="contactBtn">💬 Contact Provider</button>
+            <div class="alert alert--success" id="alertOk"></div>
+            <div class="alert alert--info"   id="alertInfo"></div>
+          </div>
+        </aside>
+      </div>`;
+
+    document.getElementById('contactBtn').addEventListener('click',async()=>{
+      if(!user){location.href=`../../pages/auth/login.html?redirect=${encodeURIComponent(location.href)}`;return;}
+      await Messaging.send({
+        from:user.id, fromName:`${user.firstName} ${user.lastName}`,
+        to:svc.provider.id, toName:svc.provider.name,
+        subject:`Service inquiry: ${svc.title}`,
+        body:`Hi ${svc.provider.name.split(' ')[0]}, I'm interested in your service "${svc.title}". Can we discuss details?`,
+      });
+      document.getElementById('alertInfo').innerHTML=`Message sent! <a href="../messaging/inbox.html" style="color:var(--accent);font-weight:600">Open inbox →</a>`;
+      document.getElementById('alertInfo').classList.add('show');
+      document.getElementById('contactBtn').disabled=true;
+    });
+  });
+})();
+</script>
+</body>
+</html>

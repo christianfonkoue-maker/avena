@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Verify Email — Avena</title>
+  <link rel="stylesheet" href="../../assets/css/components/auth.css"/>
+</head>
+<body>
+<div class="auth-card">
+  <div class="auth-brand">
+    <div class="auth-brand__icon"><svg viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor"/></svg></div>
+    <span class="auth-brand__name">Avena</span>
+  </div>
+
+  <div style="font-size:2.5rem;margin-bottom:12px;text-align:center">📬</div>
+  <h1 class="auth-title" style="text-align:center">Check your email</h1>
+  <p class="auth-subtitle" style="text-align:center">We sent a 6-digit code to <strong id="emailDisplay">your email</strong>. Enter it below.</p>
+
+  <div class="auth-alert auth-alert--error"   id="alertError"></div>
+  <div class="auth-alert auth-alert--success" id="alertSuccess"></div>
+
+  <form class="auth-form" id="verifyForm" novalidate>
+    <div class="otp-group" id="otpGroup">
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 1"/>
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 2"/>
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 3"/>
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 4"/>
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 5"/>
+      <input class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 6"/>
+    </div>
+
+    <button class="btn-auth" type="submit" id="submitBtn">
+      <span class="btn-text">Verify Email</span>
+      <div class="spinner"></div>
+    </button>
+  </form>
+
+  <p class="auth-footer" style="margin-top:16px">
+    Didn't receive it? <button class="auth-link" id="resendBtn" style="background:none;border:none;cursor:pointer;font-size:.88rem">Resend code</button>
+    <span id="resendTimer" style="color:var(--auth-muted);font-size:.82rem"></span>
+  </p>
+  <p class="auth-footer"><a class="auth-link" href="login.html">← Back to Sign In</a></p>
+</div>
+
+<script src="../../assets/js/modules/auth.js"></script>
+<script>
+(function(){
+  const email      = sessionStorage.getItem('avena_verify_email') || '';
+  const emailDisp  = document.getElementById('emailDisplay');
+  const otpInputs  = [...document.querySelectorAll('.otp-input')];
+  const submitBtn  = document.getElementById('submitBtn');
+  const resendBtn  = document.getElementById('resendBtn');
+  const resendTimer= document.getElementById('resendTimer');
+  const alertError = document.getElementById('alertError');
+  const alertOk    = document.getElementById('alertSuccess');
+
+  emailDisp.textContent = email || 'your email';
+
+  // OTP keyboard navigation
+  otpInputs.forEach((inp,i) => {
+    inp.addEventListener('input', ()=>{
+      inp.value = inp.value.replace(/\D/,'');
+      if (inp.value && i < 5) otpInputs[i+1].focus();
+    });
+    inp.addEventListener('keydown', e=>{
+      if (e.key==='Backspace' && !inp.value && i>0) otpInputs[i-1].focus();
+    });
+    inp.addEventListener('paste', e=>{
+      e.preventDefault();
+      const pasted = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      pasted.split('').forEach((ch,j)=>{ if(otpInputs[j]) otpInputs[j].value=ch; });
+      otpInputs[Math.min(pasted.length,5)].focus();
+    });
+  });
+
+  // Resend countdown
+  let countdown;
+  function startCountdown(sec=60){
+    resendBtn.disabled=true; resendBtn.style.opacity='.5';
+    let t=sec;
+    resendTimer.textContent=` (${t}s)`;
+    countdown=setInterval(()=>{
+      t--;
+      if(t<=0){ clearInterval(countdown); resendBtn.disabled=false; resendBtn.style.opacity='1'; resendTimer.textContent=''; }
+      else resendTimer.textContent=` (${t}s)`;
+    },1000);
+  }
+  startCountdown();
+
+  resendBtn.addEventListener('click', async ()=>{
+    const res = await Auth.resendVerification(email);
+    if(res.ok){ alertOk.textContent=res.message; alertOk.classList.add('show'); startCountdown(); }
+    else { alertError.textContent=res.error; alertError.classList.add('show'); }
+  });
+
+  // Submit
+  document.getElementById('verifyForm').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const code = otpInputs.map(i=>i.value).join('');
+    if(code.length<6){ alertError.textContent='Enter all 6 digits.'; alertError.classList.add('show'); return; }
+
+    submitBtn.classList.add('loading'); submitBtn.disabled=true;
+    const res = Auth.verifyEmail(email, code);
+    submitBtn.classList.remove('loading'); submitBtn.disabled=false;
+
+    if(!res.ok){ alertError.textContent=res.error; alertError.classList.add('show'); return; }
+    alertOk.textContent=res.message; alertOk.classList.add('show');
+    setTimeout(()=>location.href='login.html', 1500);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Create Account — Avena</title>
+  <link rel="stylesheet" href="../../assets/css/components/auth.css"/>
+</head>
+<body>
+<div class="auth-card" style="max-width:500px">
+
+  <div class="auth-brand">
+    <div class="auth-brand__icon">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor"/></svg>
+    </div>
+    <span class="auth-brand__name">Avena</span>
+  </div>
+
+  <h1 class="auth-title">Create your account</h1>
+  <p class="auth-subtitle">Join your campus marketplace — university email required.</p>
+
+  <div class="auth-alert auth-alert--error"   id="alertError"></div>
+  <div class="auth-alert auth-alert--success" id="alertSuccess"></div>
+
+  <form class="auth-form" id="registerForm" novalidate>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="firstName">First Name</label>
+        <input class="form-input" id="firstName" type="text" placeholder="Christian" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="lastName">Last Name</label>
+        <input class="form-input" id="lastName" type="text" placeholder="Fonkoue" required/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">University Email</label>
+      <input class="form-input" id="email" type="email" placeholder="you@university.edu.gh" required/>
+      <div class="uni-badge" id="uniBadge">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v4c0 4-3 7-7 8-4-1-7-4-7-8V6l7-4z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span id="uniName"></span>
+      </div>
+      <span class="form-hint" id="emailHint"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="studentId">Student ID</label>
+      <input class="form-input" id="studentId" type="text" placeholder="e.g. AC2024001" required/>
+      <span class="form-hint">Your official university student ID number.</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <div class="form-input-wrap">
+        <input class="form-input" id="password" type="password" placeholder="Min. 8 characters" required/>
+        <button type="button" class="input-toggle" id="togglePwd">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M1 10s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6z" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+      </div>
+      <div class="pwd-strength" id="pwdStrength">
+        <div class="pwd-strength__bar" id="bar1"></div>
+        <div class="pwd-strength__bar" id="bar2"></div>
+        <div class="pwd-strength__bar" id="bar3"></div>
+      </div>
+      <span class="form-hint" id="pwdHint"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="confirmPassword">Confirm Password</label>
+      <div class="form-input-wrap">
+        <input class="form-input" id="confirmPassword" type="password" placeholder="Repeat password" required/>
+        <button type="button" class="input-toggle" id="toggleConfirm">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M1 10s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6z" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" id="terms" required/>
+      <span>I agree to the <a class="auth-link" href="#">Terms of Service</a> and <a class="auth-link" href="#">Privacy Policy</a></span>
+    </div>
+
+    <button class="btn-auth" type="submit" id="submitBtn">
+      <span class="btn-text">Create Account</span>
+      <div class="spinner"></div>
+    </button>
+
+  </form>
+
+  <p class="auth-footer">Already have an account? <a class="auth-link" href="login.html">Sign in</a></p>
+</div>
+
+<script src="../../assets/js/modules/auth.js"></script>
+<script>
+(function(){
+  const emailInput   = document.getElementById('email');
+  const pwdInput     = document.getElementById('password');
+  const uniBadge     = document.getElementById('uniBadge');
+  const uniName      = document.getElementById('uniName');
+  const emailHint    = document.getElementById('emailHint');
+  const pwdHint      = document.getElementById('pwdHint');
+  const bars         = [document.getElementById('bar1'),document.getElementById('bar2'),document.getElementById('bar3')];
+  const alertError   = document.getElementById('alertError');
+  const alertOk      = document.getElementById('alertSuccess');
+  const submitBtn    = document.getElementById('submitBtn');
+
+  // Detect university
+  emailInput.addEventListener('input', () => {
+    const uni = Auth.getUniversityByEmail(emailInput.value.trim());
+    if (uni) {
+      uniName.textContent = '✓ ' + uni.name;
+      uniBadge.classList.add('show');
+      emailHint.textContent = '';
+    } else if (emailInput.value.includes('@')) {
+      uniBadge.classList.remove('show');
+      emailHint.textContent = 'This domain is not registered. Use your official university email.';
+      emailHint.style.color = 'var(--auth-error)';
+    } else {
+      uniBadge.classList.remove('show');
+      emailHint.textContent = '';
+    }
+  });
+
+  // Password strength
+  pwdInput.addEventListener('input', () => {
+    const v = pwdInput.value;
+    let score = 0;
+    if (v.length >= 8)  score++;
+    if (/[A-Z]/.test(v)&&/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    const cls = ['','weak','medium','strong'];
+    bars.forEach((b,i) => { b.className='pwd-strength__bar'; if(i<score) b.classList.add(cls[score]); });
+    pwdHint.textContent = ['','Weak — add numbers or symbols','Getting there — try a special character','Strong password ✓'][score];
+    pwdHint.style.color = ['','var(--auth-error)','#f6ad55','var(--auth-success)'][score];
+  });
+
+  // Toggle passwords
+  document.getElementById('togglePwd').addEventListener('click',()=>{ pwdInput.type=pwdInput.type==='password'?'text':'password'; });
+  document.getElementById('toggleConfirm').addEventListener('click',()=>{
+    const c=document.getElementById('confirmPassword');
+    c.type=c.type==='password'?'text':'password';
+  });
+
+  // Submit
+  document.getElementById('registerForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    alertError.classList.remove('show');
+    alertOk.classList.remove('show');
+
+    if (!document.getElementById('terms').checked) {
+      alertError.textContent='Please accept the Terms of Service.';
+      alertError.classList.add('show'); return;
+    }
+
+    submitBtn.classList.add('loading'); submitBtn.disabled=true;
+
+    const res = await Auth.register({
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName:  document.getElementById('lastName').value.trim(),
+      email:     emailInput.value.trim(),
+      studentId: document.getElementById('studentId').value.trim(),
+      password:  pwdInput.value,
+      confirmPassword: document.getElementById('confirmPassword').value,
+    });
+
+    submitBtn.classList.remove('loading'); submitBtn.disabled=false;
+
+    if (!res.ok) { alertError.textContent=res.error; alertError.classList.add('show'); return; }
+
+    alertOk.textContent = res.message;
+    alertOk.classList.add('show');
+    sessionStorage.setItem('avena_verify_email', emailInput.value.trim());
+    setTimeout(()=>{ location.href='verify-email.html'; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Event — Avena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--accent:#4361ee;--accent-light:#eef0fd;--accent-dark:#3451d1;--bg:#f4f6fb;--surface:#fff;--border:#e2e6f3;--text:#1a1d2e;--muted:#7a7f9a;--success:#38a169;--danger:#e53e3e;--radius:14px;--font-h:'Sora',sans-serif;--font-b:'DM Sans',sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-b);background:var(--bg);color:var(--text)}
+    a{text-decoration:none;color:inherit}
+
+    .page-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .page-bar__brand{font-family:var(--font-h);font-weight:800;font-size:1.1rem;color:var(--accent)}
+    .btn{padding:9px 18px;border-radius:9px;font-size:.85rem;font-weight:600;font-family:var(--font-h);cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(67,97,238,.25)}
+    .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px)}
+    .btn-ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+    .btn-ghost:hover{background:var(--accent-light)}
+    .btn-success{background:var(--success);color:#fff}
+    .btn-success:hover{filter:brightness(.9)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+
+    .page-wrap{max-width:900px;margin:0 auto;padding:32px 24px}
+
+    /* ── Gallery ── */
+    .gallery{border-radius:var(--radius);overflow:hidden;margin-bottom:28px;background:#000}
+    .gallery__main{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:opacity .3s}
+    .gallery__thumbs{display:flex;gap:8px;padding:10px;background:#1a1d2e}
+    .gallery__thumb{width:80px;aspect-ratio:16/9;object-fit:cover;border-radius:6px;cursor:pointer;opacity:.5;transition:opacity .2s;border:2px solid transparent;flex-shrink:0}
+    .gallery__thumb.active,.gallery__thumb:hover{opacity:1;border-color:var(--accent)}
+
+    /* ── Layout ── */
+    .event-layout{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}
+    @media(max-width:700px){.event-layout{grid-template-columns:1fr}}
+
+    /* ── Main content ── */
+    .event-main{display:flex;flex-direction:column;gap:20px}
+    .event-cat{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-family:var(--font-h)}
+    .event-title{font-family:var(--font-h);font-size:1.7rem;font-weight:800;color:var(--text);line-height:1.25}
+    .event-meta{display:flex;flex-direction:column;gap:10px}
+    .event-meta__row{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--muted)}
+    .event-meta__row strong{color:var(--text)}
+    .event-meta__icon{font-size:1.1rem;width:22px;text-align:center}
+    .event-desc{line-height:1.7;color:var(--text);font-size:.95rem}
+    .section-title{font-family:var(--font-h);font-weight:700;font-size:1rem;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+    /* ── Sidebar ── */
+    .event-sidebar{position:sticky;top:80px}
+    .sidebar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:14px}
+    .sidebar-price{font-family:var(--font-h);font-size:1.6rem;font-weight:800;color:var(--accent)}
+    .sidebar-price.free{color:var(--success)}
+    .sidebar-stat{display:flex;justify-content:space-between;font-size:.85rem}
+    .sidebar-stat span:first-child{color:var(--muted)}
+    .sidebar-stat span:last-child{font-weight:600;color:var(--text)}
+    .progress-bar-wrap{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+    .progress-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .5s}
+    .registered-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#c6f6d5;color:#276749;border-radius:99px;font-size:.8rem;font-weight:700;font-family:var(--font-h)}
+
+    /* ── Alert ── */
+    .alert{padding:12px 16px;border-radius:10px;font-size:.86rem;display:none;margin-top:8px}
+    .alert.show{display:block}
+    .alert--success{background:#f0fff4;color:var(--success);border:1px solid #c6f6d5}
+    .alert--error{background:#fff5f5;color:var(--danger);border:1px solid #fed7d7}
+    .alert--info{background:var(--accent-light);color:var(--accent);border:1px solid #c3cffa}
+  </style>
+</head>
+<body>
+
+<nav class="page-bar">
+  <span class="page-bar__brand">Avena — Event Detail</span>
+  <div style="display:flex;gap:8px">
+    <a href="messaging/upcoming-events.html" class="btn btn-ghost">← All Events</a>
+  </div>
+</nav>
+
+<div class="page-wrap" id="pageWrap">
+  <p style="color:var(--muted);text-align:center;padding:60px">Loading event…</p>
+</div>
+
+<script src="../assets/js/modules/auth.js"></script>
+<script src="../assets/js/modules/events.js"></script>
+<script>
+(function(){
+  const id   = new URLSearchParams(location.search).get('id');
+  const wrap = document.getElementById('pageWrap');
+  const user = Session.get();
+
+  if (!id) { wrap.innerHTML='<p style="color:red;text-align:center">No event ID provided.</p>'; return; }
+
+  async function init() {
+    const event = await Events.getById(id);
+    if (!event) { wrap.innerHTML='<p style="color:red;text-align:center">Event not found.</p>'; return; }
+
+    document.title = `${event.title} — Avena`;
+    const spots     = Events.spotsLeft(event);
+    const pct       = event.capacity ? Math.round((event.registered/event.capacity)*100) : 0;
+    const alreadyReg= user ? EventsDB.isRegistered(id, user.id) : false;
+    const isOrg     = Events.isUserOrganizer(event, user);
+
+    const thumbsHtml = event.images.map((img,i)=>`
+      <img class="gallery__thumb${i===0?' active':''}" src="${img}" alt="photo ${i+1}" data-src="${img}"/>`).join('');
+
+    wrap.innerHTML = `
+      <div class="gallery">
+        <img class="gallery__main" id="galleryMain" src="${event.coverImage}" alt="${event.title}"
+          onerror="this.src='https://placehold.co/800x450/4361ee/fff?text=Event'"/>
+        ${event.images.length>1?`<div class="gallery__thumbs">${thumbsHtml}</div>`:''}
+      </div>
+
+      <div class="event-layout">
+        <div class="event-main">
+          <div>
+            <div class="event-cat">${event.category}</div>
+            <h1 class="event-title">${event.title}</h1>
+          </div>
+          <div class="event-meta">
+            <div class="event-meta__row"><span class="event-meta__icon">📅</span><span>${Events.formatDate(event.date)} &nbsp;·&nbsp; ${event.time}${event.endTime?'–'+event.endTime:''}</span></div>
+            <div class="event-meta__row"><span class="event-meta__icon">📍</span><span>${event.location}</span></div>
+            <div class="event-meta__row"><span class="event-meta__icon">👤</span><span>Organized by <strong>${event.organizer?.name}</strong> · ${event.organizer?.university}</span></div>
+          </div>
+          <div>
+            <p class="section-title">About this event</p>
+            <p class="event-desc">${event.description}</p>
+          </div>
+          ${isOrg ? `<a href="event-create.html?edit=${event.id}" class="btn btn-ghost" style="align-self:flex-start">✏️ Edit Event</a>` : ''}
+        </div>
+
+        <aside class="event-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-price ${event.isPaid?'':'free'}">${Events.formatPrice(event.price)}</div>
+
+            ${event.capacity ? `
+              <div>
+                <div class="sidebar-stat"><span>Registered</span><span>${event.registered} / ${event.capacity}</span></div>
+                <div class="progress-bar-wrap" style="margin-top:6px">
+                  <div class="progress-bar" style="width:${pct}%"></div>
+                </div>
+                ${spots<=10&&spots>0?`<p style="font-size:.75rem;color:var(--danger);margin-top:4px">⚠️ Only ${spots} spots left!</p>`:''}
+              </div>` : ''}
+
+            <div id="regSection">
+              ${alreadyReg
+                ? `<div class="registered-badge">✓ You're registered</div>`
+                : spots === 0
+                  ? `<button class="btn btn-primary" disabled>Fully Booked</button>`
+                  : `<button class="btn btn-primary" id="regBtn" style="width:100%;justify-content:center">
+                      ${event.isPaid ? '💬 Contact Organizer' : '🎟️ Register Now'}
+                     </button>`
+              }
+              <div class="alert alert--success" id="alertOk"></div>
+              <div class="alert alert--error"   id="alertErr"></div>
+              <div class="alert alert--info"    id="alertInfo"></div>
+            </div>
+
+            <div style="font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px">
+              ${event.isPaid
+                ? '💬 Registering will open a chat with the organizer to arrange payment.'
+                : '📧 A confirmation email will be sent upon registration.'}
+            </div>
+          </div>
+        </aside>
+      </div>`;
+
+    // Gallery interaction
+    document.querySelectorAll('.gallery__thumb').forEach(thumb => {
+      thumb.addEventListener('click', ()=>{
+        document.getElementById('galleryMain').src = thumb.dataset.src;
+        document.querySelectorAll('.gallery__thumb').forEach(t=>t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+
+    // Register button
+    const regBtn   = document.getElementById('regBtn');
+    const alertOk  = document.getElementById('alertOk');
+    const alertErr = document.getElementById('alertErr');
+    const alertInfo= document.getElementById('alertInfo');
+
+    if (regBtn) {
+      regBtn.addEventListener('click', async ()=>{
+        if (!user) { location.href=`../../pages/auth/login.html?redirect=${encodeURIComponent(location.href)}`; return; }
+        regBtn.disabled=true; regBtn.textContent='Processing…';
+
+        const res = await Events.register(event.id, user);
+        regBtn.disabled=false;
+
+        if (!res.ok) { alertErr.textContent=res.error; alertErr.classList.add('show'); regBtn.textContent='Try Again'; return; }
+
+        if (res.isPaid) {
+          // Open chat — Messaging module will handle this
+          alertInfo.innerHTML=`Chat opened with <strong>${res.chatWith.name}</strong>. <a href="../messaging/conversation.html?userId=${res.chatWith.id}" style="color:var(--accent);font-weight:600">Open Chat →</a>`;
+          alertInfo.classList.add('show');
+          regBtn.style.display='none';
+        } else {
+          alertOk.textContent=res.message;
+          alertOk.classList.add('show');
+          regBtn.outerHTML=`<div class="registered-badge">✓ You're registered</div>`;
+        }
+      });
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

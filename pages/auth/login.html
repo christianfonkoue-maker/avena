@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign In — Avena</title>
+  <link rel="stylesheet" href="../../assets/css/components/auth.css"/>
+</head>
+<body>
+<div class="auth-card">
+
+  <div class="auth-brand">
+    <div class="auth-brand__icon">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor"/></svg>
+    </div>
+    <span class="auth-brand__name">Avena</span>
+  </div>
+
+  <h1 class="auth-title">Welcome back</h1>
+  <p class="auth-subtitle">Sign in with your university email to continue.</p>
+
+  <div class="auth-alert auth-alert--error"   id="alertError"></div>
+  <div class="auth-alert auth-alert--success" id="alertSuccess"></div>
+
+  <form class="auth-form" id="loginForm" novalidate>
+
+    <div class="form-group">
+      <label class="form-label" for="email">University Email</label>
+      <input class="form-input" id="email" type="email" placeholder="you@university.edu.gh" autocomplete="email" required/>
+      <div class="uni-badge" id="uniBadge">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v4c0 4-3 7-7 8-4-1-7-4-7-8V6l7-4z" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+        <span id="uniName">Detected university</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <div class="form-input-wrap">
+        <input class="form-input" id="password" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+        <button type="button" class="input-toggle" id="togglePwd" aria-label="Toggle password">
+          <svg id="eyeIcon" viewBox="0 0 20 20" fill="none"><path d="M1 10s3-6 9-6 9 6 9 6-3 6-9 6-9-6-9-6z" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+      </div>
+      <a href="forgot-password.html" class="form-hint auth-link" style="align-self:flex-end">Forgot password?</a>
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" id="remember"/>
+      <span>Remember me for 7 days</span>
+    </div>
+
+    <button class="btn-auth" type="submit" id="submitBtn">
+      <span class="btn-text">Sign In</span>
+      <div class="spinner"></div>
+    </button>
+
+  </form>
+
+  <p class="auth-footer">Don't have an account? <a class="auth-link" href="register.html">Create one</a></p>
+</div>
+
+<script src="../../assets/js/modules/auth.js"></script>
+<script>
+(function(){
+  const form       = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const pwdInput   = document.getElementById('password');
+  const togglePwd  = document.getElementById('togglePwd');
+  const submitBtn  = document.getElementById('submitBtn');
+  const uniBadge   = document.getElementById('uniBadge');
+  const uniName    = document.getElementById('uniName');
+  const alertError = document.getElementById('alertError');
+  const alertOk    = document.getElementById('alertSuccess');
+
+  // Redirect if already logged in
+  if (Session.isLoggedIn()) {
+    const p = new URLSearchParams(location.search).get('redirect') || '/index.html';
+    location.href = p;
+  }
+
+  // Detect university on email input
+  emailInput.addEventListener('input', () => {
+    const uni = Auth.getUniversityByEmail(emailInput.value.trim());
+    if (uni) { uniName.textContent = uni.name; uniBadge.classList.add('show'); }
+    else      { uniBadge.classList.remove('show'); }
+  });
+
+  // Toggle password
+  togglePwd.addEventListener('click', () => {
+    const isText = pwdInput.type === 'text';
+    pwdInput.type = isText ? 'password' : 'text';
+  });
+
+  // Submit
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    alertError.classList.remove('show');
+    alertOk.classList.remove('show');
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+
+    const res = await Auth.login(emailInput.value.trim(), pwdInput.value);
+
+    submitBtn.classList.remove('loading');
+    submitBtn.disabled = false;
+
+    if (res.needs2FA) {
+      // Store email for 2FA page
+      sessionStorage.setItem('avena_2fa_email', emailInput.value.trim());
+      location.href = 'two-factor.html';
+      return;
+    }
+    if (!res.ok) {
+      alertError.textContent = res.error;
+      alertError.classList.add('show');
+      if (res.needsVerify) {
+        alertError.innerHTML = res.error + ' <a class="auth-link" href="verify-email.html">Verify now</a>';
+      }
+      return;
+    }
+    const redirect = new URLSearchParams(location.search).get('redirect') || '/index.html';
+    location.href = redirect;
+  });
+})();
+</script>
+</body>
+</html>

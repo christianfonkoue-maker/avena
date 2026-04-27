@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Create Event — Avena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+ <link rel="stylesheet" href="../assets/css/components/auth.css"/>
+  <style>
+    body{background:#f4f6fb;padding:0}
+    .create-wrap{max-width:720px;margin:0 auto;padding:32px 24px}
+    .page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;margin-bottom:0}
+    .page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}
+    .auth-card{margin-top:28px;max-width:100%}
+    .section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}
+    .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    @media(max-width:560px){.form-row-3{grid-template-columns:1fr}}
+    .images-preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+    .img-thumb{width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid #e2e6f3;cursor:pointer;transition:border-color .2s}
+    .img-thumb.cover{border-color:#4361ee}
+    .img-thumb-wrap{position:relative}
+    .img-remove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#e53e3e;color:#fff;border-radius:50%;border:none;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+    .toggle-switch{display:flex;align-items:center;gap:10px;cursor:pointer}
+    .toggle-switch input{width:40px;height:22px;accent-color:#4361ee;cursor:pointer}
+    .toggle-switch span{font-size:.88rem;color:#7a7f9a}
+  </style>
+</head>
+<body>
+
+<nav class="page-bar">
+  <span class="page-bar__brand">Avena — <span id="pageMode">Create Event</span></span>
+  <a href="upcoming-events.html" style="font-size:.85rem;color:#4361ee;font-weight:600;font-family:'Sora',sans-serif">← Back to Events</a>
+</nav>
+
+<div class="create-wrap">
+  <div class="auth-card">
+
+    <h1 class="auth-title" id="formTitle">Create a New Event</h1>
+    <p class="auth-subtitle">Fill in the details below. Required fields are marked *.</p>
+
+    <div class="auth-alert auth-alert--error"   id="alertError"></div>
+    <div class="auth-alert auth-alert--success" id="alertSuccess"></div>
+
+    <form class="auth-form" id="eventForm" novalidate>
+
+      <p class="section-sep">Basic Info</p>
+
+      <div class="form-group">
+        <label class="form-label" for="title">Event Title *</label>
+        <input class="form-input" id="title" type="text" placeholder="e.g. ACity Tech Summit 2025" required/>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select class="form-input form-select" id="category" required>
+            <option value="">Select…</option>
+            <option>Technology</option>
+            <option>Health</option>
+            <option>Finance</option>
+            <option>Arts</option>
+            <option>Sports</option>
+            <option>Academic</option>
+            <option>Social</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="capacity">Capacity (optional)</label>
+          <input class="form-input" id="capacity" type="number" min="1" placeholder="e.g. 200"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Description *</label>
+        <textarea class="form-input" id="description" rows="5" placeholder="Describe the event, what attendees can expect…" style="resize:vertical" required></textarea>
+      </div>
+
+      <p class="section-sep">Date & Location</p>
+
+      <div class="form-row-3">
+        <div class="form-group">
+          <label class="form-label" for="date">Date *</label>
+          <input class="form-input" id="date" type="date" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="time">Start Time</label>
+          <input class="form-input" id="time" type="time"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="endTime">End Time</label>
+          <input class="form-input" id="endTime" type="time"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="location">Location / Venue *</label>
+        <input class="form-input" id="location" type="text" placeholder="e.g. Ashesi Auditorium or Online (Zoom)" required/>
+      </div>
+
+      <p class="section-sep">Pricing</p>
+
+      <label class="toggle-switch">
+        <input type="checkbox" id="isPaid"/>
+        <span>This is a paid event</span>
+      </label>
+
+      <div class="form-group" id="priceGroup" style="display:none">
+        <label class="form-label" for="price">Price (GHS) *</label>
+        <input class="form-input" id="price" type="number" min="0.01" step="0.01" placeholder="e.g. 50.00"/>
+        <span class="form-hint">Attendees will contact you via chat to arrange payment.</span>
+      </div>
+
+      <p class="section-sep">Photos</p>
+
+      <div class="form-group">
+        <label class="form-label">Event Photos</label>
+        <span class="form-hint">Add image URLs (one per line). The first image becomes the cover.</span>
+        <textarea class="form-input" id="imageUrls" rows="3" placeholder="https://...&#10;https://..." style="resize:vertical;margin-top:6px"></textarea>
+        <div class="images-preview" id="imagePreview"></div>
+        <span class="form-hint" style="margin-top:4px">Click an image to set it as cover.</span>
+      </div>
+
+      <button class="btn-auth" type="submit" id="submitBtn">
+        <span class="btn-text">🚀 Publish Event</span>
+        <div class="spinner"></div>
+      </button>
+
+    </form>
+  </div>
+</div>
+
+<script src="../../assets/js/modules/auth.js"></script>
+<script src="../../assets/js/modules/events.js"></script>
+<script>
+(function(){
+  // Guard — must be logged in
+  const user = Auth.guard();
+  if (!user) return;
+
+  const isPaidChk  = document.getElementById('isPaid');
+  const priceGroup = document.getElementById('priceGroup');
+  const imgInput   = document.getElementById('imageUrls');
+  const imgPreview = document.getElementById('imagePreview');
+  const alertError = document.getElementById('alertError');
+  const alertOk    = document.getElementById('alertSuccess');
+  const submitBtn  = document.getElementById('submitBtn');
+  let coverIndex   = 0;
+
+  // Set min date to today
+  document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+  // Paid toggle
+  isPaidChk.addEventListener('change', ()=>{
+    priceGroup.style.display = isPaidChk.checked ? 'flex' : 'none';
+  });
+
+  // Image preview
+  imgInput.addEventListener('input', ()=>{
+    const urls = imgInput.value.split('\n').map(u=>u.trim()).filter(Boolean);
+    imgPreview.innerHTML = urls.map((url,i)=>`
+      <div class="img-thumb-wrap" data-idx="${i}">
+        <img class="img-thumb ${i===coverIndex?'cover':''}" src="${url}" data-idx="${i}"
+          onerror="this.style.display='none'" alt="photo ${i+1}"/>
+        <button type="button" class="img-remove" data-idx="${i}">✕</button>
+      </div>`).join('');
+
+    imgPreview.querySelectorAll('.img-thumb').forEach(img=>{
+      img.addEventListener('click',()=>{
+        coverIndex=Number(img.dataset.idx);
+        imgPreview.querySelectorAll('.img-thumb').forEach(t=>t.classList.remove('cover'));
+        img.classList.add('cover');
+      });
+    });
+    imgPreview.querySelectorAll('.img-remove').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const idx=Number(btn.dataset.idx);
+        const lines=imgInput.value.split('\n').filter(Boolean);
+        lines.splice(idx,1);
+        imgInput.value=lines.join('\n');
+        imgInput.dispatchEvent(new Event('input'));
+      });
+    });
+  });
+
+  // Check edit mode
+  const editId = new URLSearchParams(location.search).get('edit');
+  if (editId) {
+    document.getElementById('pageMode').textContent='Edit Event';
+    document.getElementById('formTitle').textContent='Edit Event';
+    document.querySelector('.btn-text').textContent='💾 Save Changes';
+    Events.getById(editId).then(evt=>{
+      if (!evt) return;
+      document.getElementById('title').value       = evt.title;
+      document.getElementById('category').value    = evt.category;
+      document.getElementById('description').value = evt.description;
+      document.getElementById('date').value        = evt.date;
+      document.getElementById('time').value        = evt.time||'';
+      document.getElementById('endTime').value     = evt.endTime||'';
+      document.getElementById('location').value    = evt.location;
+      document.getElementById('capacity').value    = evt.capacity||'';
+      isPaidChk.checked = evt.isPaid;
+      if (evt.isPaid){ priceGroup.style.display='flex'; document.getElementById('price').value=evt.price; }
+      if (evt.images?.length){ imgInput.value=evt.images.join('\n'); imgInput.dispatchEvent(new Event('input')); }
+    });
+  }
+
+  // Submit
+  document.getElementById('eventForm').addEventListener('submit', async e=>{
+    e.preventDefault();
+    alertError.classList.remove('show');
+    alertOk.classList.remove('show');
+    submitBtn.classList.add('loading'); submitBtn.disabled=true;
+
+    const urls = imgInput.value.split('\n').map(u=>u.trim()).filter(Boolean);
+    // Put cover first
+    if (coverIndex > 0 && urls.length > coverIndex) {
+      const [cover] = urls.splice(coverIndex,1);
+      urls.unshift(cover);
+    }
+
+    const data = {
+      title:       document.getElementById('title').value.trim(),
+      description: document.getElementById('description').value.trim(),
+      category:    document.getElementById('category').value,
+      date:        document.getElementById('date').value,
+      time:        document.getElementById('time').value,
+      endTime:     document.getElementById('endTime').value,
+      location:    document.getElementById('location').value.trim(),
+      capacity:    document.getElementById('capacity').value || null,
+      isPaid:      isPaidChk.checked,
+      price:       document.getElementById('price').value || 0,
+      images:      urls,
+    };
+    if (editId) data.id = editId;
+
+    const res = await Events.create(data, user);
+    submitBtn.classList.remove('loading'); submitBtn.disabled=false;
+
+    if (!res.ok){ alertError.textContent=res.error; alertError.classList.add('show'); return; }
+
+    alertOk.textContent=res.message; alertOk.classList.add('show');
+    setTimeout(()=>location.href=`event.html?id=${res.event.id}`, 1500);
+  });
+})();
+</script>
+</body>
+</html>
