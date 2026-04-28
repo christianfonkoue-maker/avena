@@ -43,7 +43,7 @@
 <nav class="page-bar">
   <span class="page-bar__brand">Avena — Services</span>
   <div style="display:flex;gap:8px">
-    <a href="service-create.html" class="btn btn-primary">+ Offer a Service</a>
+    <a href="../service-create.html" class="btn btn-primary">+ Offer a Service</a>
     <a href="../../index.html" class="btn btn-ghost">← Home</a>
   </div>
 </nav>
@@ -73,7 +73,7 @@
   let all=[], activeFilter='all';
 
   function renderCard(s){
-    return `<a class="svc-card" href="service.html?id=${s.id}">
+    return `<a class="svc-card"../service.html?id=${s.id}">
       <div class="svc-card__img-wrap">
         <img class="svc-card__img" src="${s.coverImage}" alt="${s.title}" loading="lazy"
           onerror="this.src='https://placehold.co/600x400/4361ee/fff?text=Service'"/>

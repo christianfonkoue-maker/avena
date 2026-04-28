@@ -74,7 +74,7 @@
 
   // Redirect if already logged in
   if (Session.isLoggedIn()) {
-    const p = new URLSearchParams(location.search).get('redirect') || '/index.html';
+    const p = new URLSearchParams(location.search).get('redirect') || '../../index.html';
     location.href = p;
   }
 
@@ -118,7 +118,7 @@
       }
       return;
     }
-    const redirect = new URLSearchParams(location.search).get('redirect') || '/index.html';
+    const redirect = new URLSearchParams(location.search).get('redirect') || '../../index.html';
     location.href = redirect;
   });
 })();

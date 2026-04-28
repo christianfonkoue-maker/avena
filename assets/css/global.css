@@ -64,7 +64,10 @@ p,i{
 /* ==================main2=========== */
 
 
-
+.search{
+    width: 100%;
+    height: 100%;
+}
 .main2sec{
     display: flex;
     align-items: center;

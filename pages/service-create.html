@@ -4,13 +4,13 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Offer a Service — Avena</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../../assets/css/components/auth.css"/>
-  <style>body{background:#f4f6fb;padding:0}.create-wrap{max-width:680px;margin:0 auto;padding:32px 24px}.auth-card{max-width:100%;margin-top:0}.section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}.page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}</style>
+  <link rel="stylesheet" href="../assets/css/components/auth.css"/>
+  <style>body{background:#f4f6fb;padding:0}.create-wrap{width:50%;margin:0 auto;padding:32px 24px}.auth-card{max-width:100%;margin-top:0}.section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}.page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;z-index:10; width:100%}.page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}</style>
 </head>
 <body>
 <nav class="page-bar">
   <span class="page-bar__brand">Avena — Offer a Service</span>
-  <a href="get-services.html" style="font-size:.85rem;color:#4361ee;font-weight:600;font-family:'Sora',sans-serif">← Browse Services</a>
+  <a href="messaging/get-services.html" style="font-size:.85rem;color:#4361ee;font-weight:600;font-family:'Sora',sans-serif">← Browse Services</a>
 </nav>
 <div class="create-wrap">
   <div class="auth-card">
@@ -77,8 +77,8 @@
     <p class="auth-footer"><a class="auth-link" href="get-services.html">← Back to Services</a></p>
   </div>
 </div>
-<script src="../../assets/js/modules/auth.js"></script>
-<script src="../../assets/js/modules/services.js"></script>
+<script src="../assets/js/modules/auth.js"></script>
+<script src="../assets/js/modules/services.js"></script>
 <script>
 (function(){
   const user=Auth.guard();if(!user)return;

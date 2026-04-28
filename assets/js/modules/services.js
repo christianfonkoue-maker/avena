@@ -11,7 +11,7 @@ const ServicesDB = {
   async getAll() {
     const local = this._local();
     try {
-      const res  = await fetch('../../data/mock/services.json');
+const res = await fetch('/avena/data/mock/services.json')
       const mock = await res.json();
       const map  = {};
       mock.forEach(s=>map[s.id]=s);

@@ -18,20 +18,14 @@ const MOCK_UNIVERSITIES = [
 ];
 
 const MOCK_USERS = [
-//   {
-//     id:'usr_001', firstName:'Christian', lastName:'Fonkoue',
-//     email:'Christian.fonkoue@acity.edu.gh', studentId:'AC2024001',
-//     universityId:'uni_001', password:'hashed_test123',
-//     verified:true, twoFAEnabled:false, role:'student', avatar:null,
-//     createdAt:'2024-09-01T00:00:00Z',
-//   },
-    {
+{
     id:'usr_001', firstName:'Christian', lastName:'Fonkoue',
-    email:'Christian.fonkoue@acityt.edu.gh', studentId:'AC2024001',
+    email:'Christian.fonkoue@acity.edu.gh', studentId:'AC2024001',
     universityId:'uni_001', password:'hashed_test123',
     verified:true, twoFAEnabled:false, role:'student', avatar:null,
     createdAt:'2024-09-01T00:00:00Z',
   },
+
 ];
 
 /* ── Session ── */
@@ -180,15 +174,23 @@ class Auth {
   }
 
   /* LOGOUT */
-  static logout() { Session.clear(); window.location.href='/pages/auth/login.html'; }
+  static logout() { 
+  Session.clear(); 
+  window.location.href = '/pages/auth/login.html'; 
+}
 
-  /* GUARD — call at top of protected pages */
   static guard(role=null) {
-    const s = Session.get();
-    if (!s) { window.location.href=`/pages/auth/login.html?redirect=${encodeURIComponent(location.pathname)}`; return null; }
-    if (role&&s.role!==role) { window.location.href='/index.html'; return null; }
-    return s;
+  const s = Session.get();
+  if (!s) { 
+    window.location.href = `/pages/auth/login.html?redirect=${encodeURIComponent(location.pathname)}`; 
+    return null; 
   }
+  if (role && s.role !== role) { 
+    window.location.href = '/index.html'; 
+    return null; 
+  }
+  return s;
+}
 
   /* RESEND CODE */
   static async resendVerification(email) {
