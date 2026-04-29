@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — Avena</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <style>
+    :root {
+      --profile-bg: #f4f6fb;
+      --card-bg: #ffffff;
+      --border: #e2e6f3;
+      --primary: #4361ee;
+      --primary-light: #eef0fd;
+      --text: #1a1d2e;
+      --text-muted: #7a7f9a;
+      --success: #38a169;
+    }
+
+    .profile-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    /* Profile Header */
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #5a67d8 100%);
+      border-radius: 24px;
+      padding: 48px 40px;
+      margin-bottom: 32px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-header::after {
+      content: '👤';
+      position: absolute;
+      right: 40px;
+      bottom: 20px;
+      font-size: 100px;
+      opacity: 0.1;
+    }
+    .profile-avatar-large {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .avatar-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .avatar-upload-btn {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 10px 20px;
+      border-radius: 40px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .avatar-upload-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .profile-name {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .profile-role {
+      opacity: 0.9;
+    }
+
+    /* Profile Stats */
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-box {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    /* Profile Cards */
+    .profile-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .card-body {
+      padding: 24px;
+    }
+    .info-row {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      width: 140px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .info-value {
+      flex: 1;
+      color: var(--text);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-verified {
+      background: #c6f6d5;
+      color: #276749;
+    }
+    .badge-student {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Bio Section */
+    .bio-text {
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .edit-bio-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Recent Items Grid */
+    .recent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .recent-item {
+      background: #f8f9fc;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .recent-item:hover {
+      transform: translateY(-2px);
+    }
+    .recent-item img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+    .recent-item-info {
+      padding: 10px;
+    }
+    .recent-item-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .recent-item-price {
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      padding: 24px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .modal-body textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    .modal-footer {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn-save {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background: #f0f0f0;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .profile-header { padding: 32px 24px; }
+      .profile-name { font-size: 1.4rem; }
+      .avatar-img { width: 80px; height: 80px; }
+      .info-label { width: 110px; }
+      .recent-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-container">
+
+  <!-- Profile Header with Avatar -->
+  <div class="profile-header">
+    <div class="profile-avatar-large">
+      <img id="profileAvatar" class="avatar-img" src="" alt="Avatar">
+      <div>
+        <button class="avatar-upload-btn" id="uploadAvatarBtn">
+          <i class="fa-solid fa-camera"></i> Change Photo
+        </button>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        <div class="profile-name" id="profileName">Student Name</div>
+        <div class="profile-role" id="profileRole">Student</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="profile-stats">
+    <div class="stat-box">
+      <div class="stat-number" id="statsProducts">0</div>
+      <div class="stat-label">Products Sold</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="statsServices">0</div>
+      <div class="stat-label">Services Offered</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="statsEvents">0</div>
+      <div class="stat-label">Events Hosted</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="statsFollowers">0</div>
+      <div class="stat-label">Followers</div>
+    </div>
+  </div>
+
+  <!-- Personal Info Card -->
+  <div class="profile-card">
+    <div class="card-header">
+      <h2><i class="fa-regular fa-user"></i> Personal Information</h2>
+    </div>
+    <div class="card-body">
+      <div class="info-row">
+        <div class="info-label">Full Name</div>
+        <div class="info-value" id="infoFullName">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Email</div>
+        <div class="info-value" id="infoEmail">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Student ID</div>
+        <div class="info-value" id="infoStudentId">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">University</div>
+        <div class="info-value" id="infoUniversity">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Program</div>
+        <div class="info-value" id="infoProgram">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Year of Study</div>
+        <div class="info-value" id="infoYear">—</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Member since</div>
+        <div class="info-value" id="infoJoined">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bio Card -->
+  <div class="profile-card">
+    <div class="card-header">
+      <h2><i class="fa-regular fa-comment"></i> About Me</h2>
+      <button class="edit-bio-btn" id="editBioBtn"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+    </div>
+    <div class="card-body">
+      <p class="bio-text" id="bioText">Passionate about campus life, technology, and helping fellow students succeed. Feel free to reach out!</p>
+    </div>
+  </div>
+
+  <!-- Recent Products -->
+  <div class="profile-card">
+    <div class="card-header">
+      <h2><i class="fa-regular fa-box"></i> Recent Products</h2>
+      <a href="/pages/sell.html" style="color:var(--primary);font-size:0.85rem">+ Add New</a>
+    </div>
+    <div class="card-body">
+      <div class="recent-grid" id="recentProducts">
+        <div style="text-align:center;padding:20px;color:var(--text-muted)">No products yet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Services -->
+  <div class="profile-card">
+    <div class="card-header">
+      <h2><i class="fa-regular fa-handshake"></i> Recent Services</h2>
+      <a href="/pages/service-create.html" style="color:var(--primary);font-size:0.85rem">+ Add New</a>
+    </div>
+    <div class="card-body">
+      <div class="recent-grid" id="recentServices">
+        <div style="text-align:center;padding:20px;color:var(--text-muted)">No services yet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Events -->
+  <div class="profile-card">
+    <div class="card-header">
+      <h2><i class="fa-regular fa-calendar"></i> Recent Events</h2>
+      <a href="/pages/event-create.html" style="color:var(--primary);font-size:0.85rem">+ Add New</a>
+    </div>
+    <div class="card-body">
+      <div class="recent-grid" id="recentEvents">
+        <div style="text-align:center;padding:20px;color:var(--text-muted)">No events yet</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Edit Bio Modal -->
+<div id="bioModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Edit Bio</h3>
+      <button style="background:none;border:none;font-size:1.2rem;cursor:pointer" id="closeBioModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <textarea id="bioInput" rows="4" placeholder="Write something about yourself..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="cancelBioBtn">Cancel</button>
+      <button class="btn-save" id="saveBioBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/mega-menu.js"></script>
+<script src="/assets/js/modules/auth.js"></script>
+<script src="/assets/js/modules/products.js"></script>
+<script src="/assets/js/modules/services.js"></script>
+<script src="/assets/js/modules/events.js"></script>
+<script src="/assets/js/components-loader.js" type="module"></script>
+
+<script>
+(function() {
+  // Guard: must be logged in
+  const user = Auth.guard();
+  if (!user) return;
+  
+  // Helper functions
+  function formatDate(dateStr) {
+    if (!dateStr) return 'Unknown';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', year: 'numeric' });
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+  // Load and display profile
+  async function loadProfile() {
+    // Avatar
+    const avatarUrl = user.avatar || `https://placehold.co/120x120/4361ee/fff?text=${user.firstName?.charAt(0) || 'U'}`;
+    document.getElementById('profileAvatar').src = avatarUrl;
+    document.getElementById('profileName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Student';
+    
+    // Personal Info
+    document.getElementById('infoFullName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || '—';
+    document.getElementById('infoEmail').textContent = user.email || '—';
+    document.getElementById('infoStudentId').textContent = user.studentId || '—';
+    document.getElementById('infoUniversity').textContent = user.universityId || 'University';
+    document.getElementById('infoProgram').textContent = user.program || 'Not specified';
+    document.getElementById('infoYear').textContent = user.year ? `${user.year}${getYearSuffix(user.year)} Year` : 'Not specified';
+    document.getElementById('infoJoined').textContent = formatDate(user.createdAt);
+    
+    // Bio
+    const savedBio = localStorage.getItem(`avena_bio_${user.id}`);
+    if (savedBio) {
+      document.getElementById('bioText').textContent = savedBio;
+    }
+    
+    // Stats
+    const allProducts = await Products.getAll();
+    const myProducts = allProducts.filter(p => p.seller?.id === user.id);
+    const myServices = await Services.getAll().then(s => s.filter(svc => svc.provider?.id === user.id));
+    const myEvents = await Events.getAll().then(e => e.filter(evt => evt.organizer?.id === user.id));
+    
+    document.getElementById('statsProducts').textContent = myProducts.length;
+    document.getElementById('statsServices').textContent = myServices.length;
+    document.getElementById('statsEvents').textContent = myEvents.length;
+    document.getElementById('statsFollowers').textContent = Math.floor(Math.random() * 50); // Mock followers
+    
+    // Recent Products (last 4)
+    const recentProducts = myProducts.slice(0, 4);
+    const productsGrid = document.getElementById('recentProducts');
+    if (recentProducts.length === 0) {
+      productsGrid.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No products yet</div>';
+    } else {
+      productsGrid.innerHTML = recentProducts.map(p => `
+        <div class="recent-item" data-id="${p.id}" data-type="product">
+          <img src="${p.coverImage}" alt="${p.title}" onerror="this.src='https://placehold.co/200x200/4361ee/fff?text=Product'">
+          <div class="recent-item-info">
+            <div class="recent-item-title">${escapeHtml(p.title.substring(0, 30))}${p.title.length > 30 ? '...' : ''}</div>
+            <div class="recent-item-price">GHS ${p.price.toFixed(2)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Recent Services
+    const recentServices = myServices.slice(0, 4);
+    const servicesGrid = document.getElementById('recentServices');
+    if (recentServices.length === 0) {
+      servicesGrid.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No services yet</div>';
+    } else {
+      servicesGrid.innerHTML = recentServices.map(s => `
+        <div class="recent-item" data-id="${s.id}" data-type="service">
+          <img src="${s.coverImage}" alt="${s.title}" onerror="this.src='https://placehold.co/200x200/4361ee/fff?text=Service'">
+          <div class="recent-item-info">
+            <div class="recent-item-title">${escapeHtml(s.title.substring(0, 30))}${s.title.length > 30 ? '...' : ''}</div>
+            <div class="recent-item-price">${Services.formatPrice(s)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Recent Events
+    const recentEvents = myEvents.slice(0, 4);
+    const eventsGrid = document.getElementById('recentEvents');
+    if (recentEvents.length === 0) {
+      eventsGrid.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No events yet</div>';
+    } else {
+      eventsGrid.innerHTML = recentEvents.map(e => `
+        <div class="recent-item" data-id="${e.id}" data-type="event">
+          <img src="${e.coverImage}" alt="${e.title}" onerror="this.src='https://placehold.co/200x200/4361ee/fff?text=Event'">
+          <div class="recent-item-info">
+            <div class="recent-item-title">${escapeHtml(e.title.substring(0, 30))}${e.title.length > 30 ? '...' : ''}</div>
+            <div class="recent-item-price">${Events.formatPrice(e.price)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Click handlers for recent items
+    document.querySelectorAll('.recent-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.dataset.id;
+        const type = item.dataset.type;
+        if (type === 'product') window.location.href = `/pages/product.html?id=${id}`;
+        if (type === 'service') window.location.href = `/pages/service.html?id=${id}`;
+        if (type === 'event') window.location.href = `/pages/event.html?id=${id}`;
+      });
+    });
+  }
+  
+  function getYearSuffix(year) {
+    const lastDigit = year % 10;
+    if (lastDigit === 1) return 'st';
+    if (lastDigit === 2) return 'nd';
+    if (lastDigit === 3) return 'rd';
+    return 'th';
+  }
+  
+  // Avatar upload
+  function readFileAsDataURL(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
+    document.getElementById('avatarInput').click();
+  });
+  
+  document.getElementById('avatarInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const dataUrl = await readFileAsDataURL(file);
+      user.avatar = dataUrl;
+      Session.set(user);
+      document.getElementById('profileAvatar').src = dataUrl;
+      alert('Profile photo updated!');
+    }
+  });
+  
+  // Bio modal
+  const bioModal = document.getElementById('bioModal');
+  const editBioBtn = document.getElementById('editBioBtn');
+  const bioInput = document.getElementById('bioInput');
+  const bioText = document.getElementById('bioText');
+  
+  editBioBtn.addEventListener('click', () => {
+    bioInput.value = bioText.textContent;
+    bioModal.classList.add('show');
+  });
+  
+  document.getElementById('closeBioModal').addEventListener('click', () => {
+    bioModal.classList.remove('show');
+  });
+  
+  document.getElementById('cancelBioBtn').addEventListener('click', () => {
+    bioModal.classList.remove('show');
+  });
+  
+  document.getElementById('saveBioBtn').addEventListener('click', () => {
+    const newBio = bioInput.value.trim();
+    if (newBio) {
+      bioText.textContent = newBio;
+      localStorage.setItem(`avena_bio_${user.id}`, newBio);
+    }
+    bioModal.classList.remove('show');
+  });
+  
+  // Close modal on backdrop click
+  bioModal.addEventListener('click', (e) => {
+    if (e.target === bioModal) bioModal.classList.remove('show');
+  });
+  
+  // Load everything
+  loadProfile();
+})();
+</script>
+
+</body>
+</html>

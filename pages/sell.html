@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell on Avena — List Your Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <style>
+    /* Variables */
+    :root {
+      --success: #38a169;
+      --warning: #ecc94b;
+      --danger: #e53e3e;
+      --primary: #4361ee;
+      --primary-dark: #3451d1;
+      --gray-light: #f7f8fc;
+      --gray-border: #e2e6f3;
+      --text: #1a1d2e;
+      --text-muted: #7a7f9a;
+    }
+
+    .sell-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Stepper */
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gray-border);
+      z-index: 0;
+    }
+    .step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      flex: 1;
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border: 2px solid var(--gray-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 0 auto 8px;
+      transition: all 0.3s;
+    }
+    .step.active .step-number {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .step.completed .step-number {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step.active .step-label {
+      color: var(--primary);
+    }
+
+    /* Form Steps */
+    .form-step {
+      display: none;
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      animation: fadeIn 0.3s ease;
+    }
+    .form-step.active-step {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .form-label .required {
+      color: var(--danger);
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--gray-border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 560px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Image Upload */
+    .image-upload-area {
+      border: 2px dashed var(--gray-border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .image-upload-area:hover {
+      border-color: var(--primary);
+      background: var(--gray-light);
+    }
+    .image-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .preview-item {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid var(--gray-border);
+    }
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preview-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+
+    /* Buttons */
+    .btn-nav {
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn-prev, .btn-next, .btn-submit {
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-prev {
+      background: var(--gray-light);
+      color: var(--text);
+    }
+    .btn-next, .btn-submit {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-next:hover, .btn-submit:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .btn-prev:hover {
+      background: var(--gray-border);
+    }
+
+    /* Condition Toggle */
+    .condition-toggle {
+      display: flex;
+      gap: 12px;
+    }
+    .condition-option {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      border: 1.5px solid var(--gray-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .condition-option.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Alert */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .alert.show { display: block; }
+    .alert-error { background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7; }
+    .alert-success { background: #f0fff4; color: var(--success); border: 1px solid #c6f6d5; }
+  </style>
+</head>
+<body>
+
+<div class="sell-container">
+  
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="step active" data-step="1">
+      <div class="step-number">1</div>
+      <div class="step-label">Basic Info</div>
+    </div>
+    <div class="step" data-step="2">
+      <div class="step-number">2</div>
+      <div class="step-label">Category</div>
+    </div>
+    <div class="step" data-step="3">
+      <div class="step-number">3</div>
+      <div class="step-label">Pricing & Stock</div>
+    </div>
+    <div class="step" data-step="4">
+      <div class="step-number">4</div>
+      <div class="step-label">Photos</div>
+    </div>
+    <div class="step" data-step="5">
+      <div class="step-number">5</div>
+      <div class="step-label">Review</div>
+    </div>
+  </div>
+
+  <!-- Alertes -->
+  <div id="alertError" class="alert alert-error"></div>
+  <div id="alertSuccess" class="alert alert-success"></div>
+
+  <!-- Étape 1 : Basic Info -->
+  <div class="form-step active-step" id="step1">
+    <h2 class="step-title">Tell us about your item</h2>
+    <p class="step-desc">Provide a clear title and detailed description to attract buyers.</p>
+    
+    <div class="form-group">
+      <label class="form-label">Product Title <span class="required">*</span></label>
+      <input type="text" id="title" class="form-input" placeholder="e.g., HP Laptop Core i5 8GB RAM" maxlength="100">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Description <span class="required">*</span></label>
+      <textarea id="description" class="form-textarea" placeholder="Describe the product condition, features, reason for selling..."></textarea>
+      <small class="character-count" style="display:block;margin-top:4px;color:var(--text-muted)">Min. 20 characters</small>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Condition <span class="required">*</span></label>
+      <div class="condition-toggle" id="conditionToggle">
+        <div class="condition-option" data-condition="new">🆕 Brand New</div>
+        <div class="condition-option" data-condition="used">🔄 Used - Good</div>
+      </div>
+    </div>
+    
+    <div class="btn-nav">
+      <button class="btn-prev" disabled style="visibility:hidden">Previous</button>
+      <button class="btn-next" data-next="2">Next →</button>
+    </div>
+  </div>
+
+  <!-- Étape 2 : Catégorie -->
+  <div class="form-step" id="step2">
+    <h2 class="step-title">Choose a category</h2>
+    <p class="step-desc">Select the category and subcategory that best fit your item.</p>
+    
+    <div class="form-group">
+      <label class="form-label">Category <span class="required">*</span></label>
+      <select id="category" class="form-select">
+        <option value="">Select a category</option>
+        <option value="school">🎓 School Features</option>
+        <option value="electronics">💻 Electronics</option>
+        <option value="furniture">🪑 Furniture</option>
+        <option value="food">🍱 Food & Collation</option>
+        <option value="dress">👗 Dress</option>
+        <option value="sport">⚽ Sport Equipment</option>
+        <option value="beauty">💄 Beauty</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Subcategory <span class="required">*</span></label>
+      <select id="subcategory" class="form-select" disabled>
+        <option value="">First select a category</option>
+      </select>
+    </div>
+    
+    <div class="btn-nav">
+      <button class="btn-prev" data-prev="1">← Previous</button>
+      <button class="btn-next" data-next="3">Next →</button>
+    </div>
+  </div>
+
+  <!-- Étape 3 : Prix et Stock -->
+  <div class="form-step" id="step3">
+    <h2 class="step-title">Set your price</h2>
+    <p class="step-desc">Be competitive and fair to attract more buyers.</p>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Price (GHS) <span class="required">*</span></label>
+        <input type="number" id="price" class="form-input" placeholder="e.g., 150" min="0.01" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">MOQ (Minimum Order Quantity)</label>
+        <input type="number" id="moq" class="form-input" placeholder="e.g., 1" min="1" value="1">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Stock Quantity</label>
+      <input type="number" id="stock" class="form-input" placeholder="How many available?" min="1" value="1">
+    </div>
+    
+    <div class="btn-nav">
+      <button class="btn-prev" data-prev="2">← Previous</button>
+      <button class="btn-next" data-next="4">Next →</button>
+    </div>
+  </div>
+
+  <!-- Étape 4 : Photos -->
+  <div class="form-step" id="step4">
+    <h2 class="step-title">Add photos</h2>
+    <p class="step-desc">Upload clear photos of your item. The first photo will be the cover.</p>
+    
+    <div class="form-group">
+      <div id="imageUploadArea" class="image-upload-area">
+        <i class="fa-solid fa-cloud-upload-alt" style="font-size:2rem;color:var(--primary)"></i>
+        <p>Click or drag images here</p>
+        <small>Supports: JPG, PNG, WebP, or image URLs</small>
+        <input type="file" id="imageFileInput" multiple accept="image/*" style="display:none">
+      </div>
+      <div class="image-preview" id="imagePreview"></div>
+      <small class="form-hint" style="display:block;margin-top:8px;color:var(--text-muted)">
+        You can also paste image URLs. First image becomes cover.
+      </small>
+    </div>
+    
+    <div class="btn-nav">
+      <button class="btn-prev" data-prev="3">← Previous</button>
+      <button class="btn-next" data-next="5">Next →</button>
+    </div>
+  </div>
+
+  <!-- Étape 5 : Review -->
+  <div class="form-step" id="step5">
+    <h2 class="step-title">Review your listing</h2>
+    <p class="step-desc">Check everything before publishing.</p>
+    
+    <div id="reviewContent" style="background:var(--gray-light);border-radius:12px;padding:20px;margin-bottom:20px">
+      <!-- Dynamically filled -->
+    </div>
+    
+    <div class="btn-nav">
+      <button class="btn-prev" data-prev="4">← Previous</button>
+      <button class="btn-submit" id="submitBtn">🚀 Publish Listing</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="/avena/assets/js/mega-menu.js"></script>
+<script src="/avena/assets/js/modules/auth.js"></script>
+<script src="/avena/assets/js/modules/product.js"></script>
+<script src="/avena/assets/js/components-loader.js" type="module"></script>
+
+<script>
+(function() {
+  // Guard: must be logged in
+  const user = Auth.guard();
+  if (!user) return;
+  
+  // Subcategories mapping (based on mega menu)
+  const SUBCATEGORIES = {
+    school: ['Fournitures', 'Sacs & Transport', 'Livres & Docs', 'Impression'],
+    electronics: ['Ordinateurs', 'Audio', 'Téléphones', 'Câbles & Adaptateurs'],
+    furniture: ['Bureau', 'Chambre', 'Rangement', 'Déco'],
+    food: ['Snacks', 'Boissons', 'Repas rapides', 'Cuisine dorm'],
+    dress: ['Femmes', 'Hommes', 'Chaussures', 'Accessoires'],
+    sport: ['Sports collectifs', 'Fitness', 'Running', 'Natation'],
+    beauty: ['Soin du visage', 'Maquillage', 'Cheveux', 'Corps & Parfums']
+  };
+  
+  // Variables
+  let currentStep = 1;
+  let condition = 'new';
+  let imageUrls = [];
+  let editMode = false;
+  let editId = null;
+  
+  // Elements
+  const steps = document.querySelectorAll('.step');
+  const formSteps = document.querySelectorAll('.form-step');
+  const categorySelect = document.getElementById('category');
+  const subcategorySelect = document.getElementById('subcategory');
+  const conditionOptions = document.querySelectorAll('.condition-option');
+  const imageUploadArea = document.getElementById('imageUploadArea');
+  const imageFileInput = document.getElementById('imageFileInput');
+  const imagePreview = document.getElementById('imagePreview');
+  const reviewContent = document.getElementById('reviewContent');
+  
+  // Check edit mode
+  const params = new URLSearchParams(window.location.search);
+  editId = params.get('edit');
+  if (editId) {
+    editMode = true;
+    document.title = 'Edit Product — Avena';
+    loadProductForEdit(editId);
+  }
+  
+  // Load product data for edit mode
+  async function loadProductForEdit(id) {
+    const product = await Products.getById(id);
+    if (product && product.seller?.id === user.id) {
+      document.getElementById('title').value = product.title;
+      document.getElementById('description').value = product.description;
+      condition = product.condition || 'new';
+      updateConditionUI();
+      categorySelect.value = product.category;
+      updateSubcategories(product.category);
+      setTimeout(() => {
+        subcategorySelect.value = product.subcategory;
+      }, 50);
+      document.getElementById('price').value = product.price;
+      document.getElementById('moq').value = product.moq || 1;
+      document.getElementById('stock').value = product.stock || 1;
+      imageUrls = [...(product.images || [])];
+      renderImagePreview();
+    }
+  }
+  
+  // Update condition UI
+  function updateConditionUI() {
+    conditionOptions.forEach(opt => {
+      const val = opt.dataset.condition;
+      if (val === condition) opt.classList.add('selected');
+      else opt.classList.remove('selected');
+    });
+  }
+  
+  conditionOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      condition = opt.dataset.condition;
+      updateConditionUI();
+    });
+  });
+  
+  // Update subcategories based on selected category
+  function updateSubcategories(category) {
+    const subs = SUBCATEGORIES[category] || [];
+    subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+    subs.forEach(sub => {
+      subcategorySelect.innerHTML += `<option value="${sub}">${sub}</option>`;
+    });
+    subcategorySelect.disabled = subs.length === 0;
+  }
+  
+  categorySelect.addEventListener('change', () => {
+    updateSubcategories(categorySelect.value);
+  });
+  
+  // Image upload handling
+  imageUploadArea.addEventListener('click', () => imageFileInput.click());
+  
+  function readFileAsDataURL(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  function addImage(url) {
+    if (url && !imageUrls.includes(url)) {
+      imageUrls.push(url);
+      renderImagePreview();
+    }
+  }
+  
+  function removeImage(index) {
+    imageUrls.splice(index, 1);
+    renderImagePreview();
+  }
+  
+  function renderImagePreview() {
+    imagePreview.innerHTML = imageUrls.map((url, i) => `
+      <div class="preview-item">
+        <img src="${url}" alt="Preview ${i+1}">
+        <button class="preview-remove" data-index="${i}">✕</button>
+        ${i === 0 ? '<span style="position:absolute;bottom:4px;left:4px;background:#4361ee;color:white;padding:2px 6px;border-radius:4px;font-size:10px">Cover</span>' : ''}
+      </div>
+    `).join('');
+    
+    // Add remove listeners
+    document.querySelectorAll('.preview-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeImage(parseInt(btn.dataset.index));
+      });
+    });
+  }
+  
+  imageFileInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      const dataUrl = await readFileAsDataURL(file);
+      addImage(dataUrl);
+    }
+    imageFileInput.value = '';
+  });
+  
+  // Allow pasting image URLs
+  document.addEventListener('paste', (e) => {
+    const text = e.clipboardData?.getData('text');
+    if (text && text.match(/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)/i)) {
+      addImage(text);
+      e.preventDefault();
+    }
+  });
+  
+  // Navigation between steps
+  function showStep(step) {
+    currentStep = step;
+    formSteps.forEach((fs, i) => {
+      if (i + 1 === step) fs.classList.add('active-step');
+      else fs.classList.remove('active-step');
+    });
+    steps.forEach((s, i) => {
+      if (i + 1 === step) s.classList.add('active');
+      else s.classList.remove('active');
+      if (i + 1 < step) s.classList.add('completed');
+      else s.classList.remove('completed');
+    });
+  }
+  
+  document.querySelectorAll('.btn-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nextStep = parseInt(btn.dataset.next);
+      if (validateStep(currentStep)) {
+        showStep(nextStep);
+        if (nextStep === 5) updateReview();
+      }
+    });
+  });
+  
+  document.querySelectorAll('.btn-prev').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prevStep = parseInt(btn.dataset.prefix);
+      showStep(prevStep);
+    });
+  });
+  
+  // Validation per step
+  function validateStep(step) {
+    const alertError = document.getElementById('alertError');
+    alertError.classList.remove('show');
+    
+    if (step === 1) {
+      const title = document.getElementById('title').value.trim();
+      const desc = document.getElementById('description').value.trim();
+      if (!title) { alertError.textContent = 'Please enter a product title.'; alertError.classList.add('show'); return false; }
+      if (title.length < 5) { alertError.textContent = 'Title must be at least 5 characters.'; alertError.classList.add('show'); return false; }
+      if (!desc) { alertError.textContent = 'Please enter a description.'; alertError.classList.add('show'); return false; }
+      if (desc.length < 20) { alertError.textContent = 'Description must be at least 20 characters.'; alertError.classList.add('show'); return false; }
+    }
+    
+    if (step === 2) {
+      const category = categorySelect.value;
+      const subcategory = subcategorySelect.value;
+      if (!category) { alertError.textContent = 'Please select a category.'; alertError.classList.add('show'); return false; }
+      if (!subcategory) { alertError.textContent = 'Please select a subcategory.'; alertError.classList.add('show'); return false; }
+    }
+    
+    if (step === 3) {
+      const price = parseFloat(document.getElementById('price').value);
+      if (isNaN(price) || price <= 0) { alertError.textContent = 'Please enter a valid price.'; alertError.classList.add('show'); return false; }
+    }
+    
+    if (step === 4) {
+      if (imageUrls.length === 0) {
+        alertError.textContent = 'Please add at least one photo of your item.';
+        alertError.classList.add('show');
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  // Update review step
+  function updateReview() {
+    const title = document.getElementById('title').value;
+    const desc = document.getElementById('description').value;
+    const category = categorySelect.options[categorySelect.selectedIndex]?.text || '';
+    const subcategory = subcategorySelect.value;
+    const price = document.getElementById('price').value;
+    const moq = document.getElementById('moq').value;
+    const stock = document.getElementById('stock').value;
+    
+    reviewContent.innerHTML = `
+      <div style="display:grid;gap:12px">
+        <div><strong>Title:</strong> ${escapeHtml(title)}</div>
+        <div><strong>Description:</strong> ${escapeHtml(desc.substring(0, 150))}${desc.length > 150 ? '...' : ''}</div>
+        <div><strong>Condition:</strong> ${condition === 'new' ? 'Brand New' : 'Used - Good'}</div>
+        <div><strong>Category:</strong> ${escapeHtml(category)} › ${escapeHtml(subcategory)}</div>
+        <div><strong>Price:</strong> GHS ${parseFloat(price).toFixed(2)}</div>
+        <div><strong>MOQ:</strong> ${moq} piece(s)</div>
+        <div><strong>Stock:</strong> ${stock} available</div>
+        <div><strong>Photos:</strong> ${imageUrls.length} image(s) uploaded (first is cover)</div>
+      </div>
+    `;
+  }
+  
+  // Submit
+  document.getElementById('submitBtn').addEventListener('click', async () => {
+    if (!validateStep(4)) return;
+    
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Publishing...';
+    
+    const data = {
+      title: document.getElementById('title').value.trim(),
+      description: document.getElementById('description').value.trim(),
+      condition: condition,
+      category: categorySelect.value,
+      subcategory: subcategorySelect.value,
+      price: parseFloat(document.getElementById('price').value),
+      moq: parseInt(document.getElementById('moq').value) || 1,
+      stock: parseInt(document.getElementById('stock').value) || 1,
+      images: imageUrls
+    };
+    
+    let result;
+    if (editMode && editId) {
+      // Update existing product (simulate update)
+      const existing = await Products.getById(editId);
+      if (existing) {
+        Object.assign(existing, data);
+        ProductsDB.save(existing);
+        result = { ok: true, product: existing, message: 'Product updated!' };
+      } else {
+        result = { ok: false, error: 'Product not found.' };
+      }
+    } else {
+      result = await Products.create(data, user);
+    }
+    
+    btn.disabled = false;
+    btn.textContent = '🚀 Publish Listing';
+    
+    if (!result.ok) {
+      document.getElementById('alertError').textContent = result.error;
+      document.getElementById('alertError').classList.add('show');
+      return;
+    }
+    
+    document.getElementById('alertSuccess').textContent = result.message;
+    document.getElementById('alertSuccess').classList.add('show');
+    
+    setTimeout(() => {
+      window.location.href = `/pages/product.html?id=${result.product.id}`;
+    }, 1500);
+  });
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+})();
+</script>
+
+</body>
+</html>
