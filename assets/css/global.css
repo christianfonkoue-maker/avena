@@ -775,14 +775,14 @@ footer{
           cursor: pointer;
         }
         footer .instal .row img{
-          border:1px solid #088178;
+          border:1px solid #ff3333;
           border-radius: 6px;
         }
         footer .image img{
           margin: 10px 0 15px 0;
         }
         footer .follow i:hover, footer a:hover{
-          color: #088178;
+          color: #ff3333;
 
         }
         footer .by-me{
