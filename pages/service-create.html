@@ -5,7 +5,18 @@
   <title>Offer a Service — Avena</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/css/components/auth.css"/>
-  <style>body{background:#f4f6fb;padding:0}.create-wrap{width:50%;margin:0 auto;padding:32px 24px}.auth-card{max-width:100%;margin-top:0}.section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}.page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;z-index:10; width:100%}.page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}</style>
+  <style>
+    body{background:#f4f6fb;padding:0}
+    .create-wrap{width:50%;margin:0 auto;padding:32px 24px}
+    .auth-card{max-width:100%;margin-top:0}
+    .section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}
+    .page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;z-index:10;width:100%}
+    .page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}
+    .image-preview { margin-top: 12px; max-width: 200px; border-radius: 8px; overflow: hidden; }
+    .image-preview img { width: 100%; height: auto; display: none; }
+    .image-preview img.show { display: block; }
+    .image-placeholder { color: #7a7f9a; font-size: 0.8rem; margin-top: 8px; }
+  </style>
 </head>
 <body>
 <nav class="page-bar">
@@ -18,7 +29,7 @@
     <p class="auth-subtitle">Share your expertise with other students on campus.</p>
     <div class="auth-alert auth-alert--error"   id="alertError"></div>
     <div class="auth-alert auth-alert--success" id="alertSuccess"></div>
-    <form class="auth-form" id="svcForm" novalidate>
+    <form class="auth-form" id="svcForm" novalidate enctype="multipart/form-data">
       <p class="section-sep">Service Info</p>
       <div class="form-group">
         <label class="form-label" for="title">Service Title *</label>
@@ -63,12 +74,18 @@
         <label class="form-label" for="deliveryDays">Delivery Time (days)</label>
         <input class="form-input" id="deliveryDays" type="number" min="1" placeholder="e.g. 7 (leave empty if flexible)"/>
       </div>
+      
       <p class="section-sep">Cover Image</p>
       <div class="form-group">
-        <label class="form-label" for="imageUrl">Image URL</label>
-        <input class="form-input" id="imageUrl" type="url" placeholder="https://…"/>
-        <span class="form-hint">Paste a direct image URL. Leave empty for auto-generated placeholder.</span>
+        <label class="form-label" for="imageFile">Photo du service</label>
+        <input class="form-input" id="imageFile" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif"/>
+        <span class="form-hint">Sélectionnez une image (JPG, PNG, WebP, GIF)</span>
+        <div class="image-preview" id="imagePreview">
+          <img id="previewImg" alt="Aperçu">
+        </div>
+        <div class="image-placeholder" id="placeholderText">Aucune image sélectionnée</div>
       </div>
+      
       <button class="btn-auth" type="submit" id="submitBtn">
         <span class="btn-text">🚀 Publish Service</span>
         <div class="spinner"></div>
@@ -77,31 +94,79 @@
     <p class="auth-footer"><a class="auth-link" href="get-services.html">← Back to Services</a></p>
   </div>
 </div>
+
 <script src="../assets/js/modules/auth.js"></script>
 <script src="../assets/js/modules/services.js"></script>
 <script>
 (function(){
-  const user=Auth.guard();if(!user)return;
-  document.getElementById('svcForm').addEventListener('submit',async e=>{
+  const user = Auth.guard();
+  if (!user) return;
+  
+  // Aperçu de l'image
+  const fileInput = document.getElementById('imageFile');
+  const previewImg = document.getElementById('previewImg');
+  const placeholderText = document.getElementById('placeholderText');
+  
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        previewImg.src = event.target.result;
+        previewImg.classList.add('show');
+        placeholderText.textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.classList.remove('show');
+      placeholderText.textContent = 'Aucune image sélectionnée';
+    }
+  });
+  
+  // Soumission du formulaire avec FormData
+  document.getElementById('svcForm').addEventListener('submit', async e => {
     e.preventDefault();
-    const ae=document.getElementById('alertError'),ao=document.getElementById('alertSuccess');
-    ae.classList.remove('show');ao.classList.remove('show');
-    const btn=document.getElementById('submitBtn');btn.classList.add('loading');btn.disabled=true;
-    const imgUrl=document.getElementById('imageUrl').value.trim();
-    const res=await Services.create({
-      title:       document.getElementById('title').value.trim(),
-      description: document.getElementById('description').value.trim(),
-      category:    document.getElementById('category').value,
-      subcategory: document.getElementById('subcategory').value.trim(),
-      price:       document.getElementById('price').value,
-      priceType:   document.getElementById('priceType').value,
-      deliveryDays:document.getElementById('deliveryDays').value||null,
-      images:      imgUrl?[imgUrl]:[],
-    },user);
-    btn.classList.remove('loading');btn.disabled=false;
-    if(!res.ok){ae.textContent=res.error;ae.classList.add('show');return;}
-    ao.textContent=res.message;ao.classList.add('show');
-    setTimeout(()=>location.href=`service.html?id=${res.service.id}`,1400);
+    const ae = document.getElementById('alertError'), ao = document.getElementById('alertSuccess');
+    ae.classList.remove('show'); ao.classList.remove('show');
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading'); btn.disabled = true;
+    
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value.trim());
+    formData.append('description', document.getElementById('description').value.trim());
+    formData.append('category', document.getElementById('category').value);
+    formData.append('subcategory', document.getElementById('subcategory').value.trim());
+    formData.append('price', document.getElementById('price').value);
+    formData.append('priceType', document.getElementById('priceType').value);
+    const deliveryDays = document.getElementById('deliveryDays').value;
+    if (deliveryDays) formData.append('deliveryDays', deliveryDays);
+    
+    const imageFile = document.getElementById('imageFile').files[0];
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    
+    const token = localStorage.getItem('avena_token');
+    try {
+      const response = await fetch('http://localhost:5000/api/services', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+      
+      const result = await response.json();
+      btn.classList.remove('loading'); btn.disabled = false;
+      
+      if (!response.ok) throw new Error(result.error || 'Creation failed');
+      
+      ao.textContent = result.message; ao.classList.add('show');
+      setTimeout(() => location.href = `service.html?id=${result.service.id}`, 1400);
+    } catch (error) {
+      btn.classList.remove('loading'); btn.disabled = false;
+      ae.textContent = error.message; ae.classList.add('show');
+    }
   });
 })();
 </script>

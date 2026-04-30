@@ -424,7 +424,7 @@
 <script src="/avena/assets/js/modules/product.js"></script>
 <script src="/avena/assets/js/components-loader.js" type="module"></script>
 
-<script>
+<script>   
 (function() {
   // Guard: must be logged in
   const user = Auth.guard();
@@ -672,12 +672,22 @@
   }
   
   // Submit
+  // Submit
   document.getElementById('submitBtn').addEventListener('click', async () => {
     if (!validateStep(4)) return;
     
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
     btn.textContent = 'Publishing...';
+    
+    const token = sessionStorage.getItem('avena_token');
+    if (!token) {
+      document.getElementById('alertError').textContent = 'You must be logged in.';
+      document.getElementById('alertError').classList.add('show');
+      btn.disabled = false;
+      btn.textContent = '🚀 Publish Listing';
+      return;
+    }
     
     const data = {
       title: document.getElementById('title').value.trim(),
@@ -691,37 +701,38 @@
       images: imageUrls
     };
     
-    let result;
-    if (editMode && editId) {
-      // Update existing product (simulate update)
-      const existing = await Products.getById(editId);
-      if (existing) {
-        Object.assign(existing, data);
-        ProductsDB.save(existing);
-        result = { ok: true, product: existing, message: 'Product updated!' };
-      } else {
-        result = { ok: false, error: 'Product not found.' };
+    try {
+      const response = await fetch('http://localhost:5000/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create product');
       }
-    } else {
-      result = await Products.create(data, user);
-    }
-    
-    btn.disabled = false;
-    btn.textContent = '🚀 Publish Listing';
-    
-    if (!result.ok) {
-      document.getElementById('alertError').textContent = result.error;
+      
+      document.getElementById('alertSuccess').textContent = 'Product created! Redirecting...';
+      document.getElementById('alertSuccess').classList.add('show');
+      
+      setTimeout(() => {
+        window.location.href = `/avena/pages/product.html?id=${result.product.id}`;
+      }, 1500);
+      
+    } catch (error) {
+      document.getElementById('alertError').textContent = error.message;
       document.getElementById('alertError').classList.add('show');
-      return;
+      btn.disabled = false;
+      btn.textContent = '🚀 Publish Listing';
     }
-    
-    document.getElementById('alertSuccess').textContent = result.message;
-    document.getElementById('alertSuccess').classList.add('show');
-    
-    setTimeout(() => {
-      window.location.href = `/pages/product.html?id=${result.product.id}`;
-    }, 1500);
   });
+//comenter
+
   
   function escapeHtml(str) {
     if (!str) return '';

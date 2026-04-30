@@ -1,25 +1,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alibaba Clone</title>
+    <title>Avena — Campus Marketplace</title>
 
     <!-- cdn -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <!-- css -->
     <link rel="stylesheet" href="/avena/assets/css/global.css">
-
 </head>
 <body>
     <header>
         <div class="header_main">
             <div class="main1logo">
-                <img src="/avena/assets/images/Logo vectoriel Avena.png" alt="">
+                <img src="/avena/assets/images/Logo vectoriel Avena.png" alt="Avena">
             </div>
             <div class="main2sec">
                 <div class="main2">
                     <div class="main2three">
-                        <input class="search" placeholder="hello kitty">
+                        <input class="search" placeholder="Rechercher produits, services, événements...">
                     </div>
                     <div class="main2five">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -31,20 +30,44 @@
                 <div class="main3">
                     <div class="main3one">
                         <div class="main3one_up">
-                            <p>Contry:</p>
+                            <p>Country:</p>
                         </div>
                         <div class="main3one_down">
-                            <img src="assets/images/country-flags-main/svg/gh.svg" alt="">
+                            <img src="/avena/assets/images/country-flags-main/svg/gh.svg" alt="GH">
                             <p><b>GH</b></p>
                         </div>
                     </div>
 
                     <div class="main3two">
                         <i class="fa-regular fa-envelope fa-lg"></i>
-                         <a href="pages/messaging/inbox.html">messagings</a>
+                        <a href="/avena/pages/messaging/inbox.html">Messages</a>
                     </div>
-                    <div class="main3four">
-                        <a href="pages/auth/login.html">sing up</a>
+
+                    <div class="main3four" id="authButton">
+                        <a href="/avena/pages/auth/login.html">Sign in</a>
+                    </div>
+
+                    <!-- Menu utilisateur (affiché uniquement si connecté) -->
+                    <div class="user-menu" id="userMenu" style="display:none">
+                        <div class="dropdown-toggle" id="userDropdownToggle">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/avena/pages/dashboard.html">
+                                <i class="fa-regular fa-chart-line"></i> Dashboard
+                            </a>
+                            <a href="/avena/pages/profile.html">
+                                <i class="fa-regular fa-user"></i> Mon profil
+                            </a>
+                            <hr>
+                            <a href="/avena/pages/messaging/inbox.html">
+                                <i class="fa-regular fa-envelope"></i> Messages
+                            </a>
+                            <a href="#" id="logoutBtn">
+                                <i class="fa-regular fa-sign-out-alt"></i> Déconnexion
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -52,48 +75,92 @@
         <div class="header_btm">
             <div class="hbtm_left">
                 <div class="hbtm_left1 nav-item--categories" id="categoryTrigger">
-  <button class="nav-btn categories-btn" aria-haspopup="true" aria-expanded="false" aria-controls="megaMenu">
-    <i class="fa-solid fa-bars-staggered"></i>
-    <p>All Category</p>
-  </button>
-
-  <!-- LE MEGA MENU VIENT ICI — copie-colle ce bloc entier -->
-  <div class="mega-menu" id="megaMenu" role="dialog" aria-label="Catégories" inert>
-    <div class="mega-menu__inner">
-      <aside class="mega-menu__sidebar">
-        <p class="sidebar__label">Toutes les catégories</p>
-        <ul class="sidebar__list" role="list"></ul>
-      </aside>
-      <div class="mega-menu__content"></div>
-    </div>
-  </div>
-
-</div>
-                <div class="hbtm_left1">
-                    <a href="pages/messaging/get-services.html">Get a Services</a>
+                    <button class="nav-btn categories-btn">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                        <p>All Category</p>
+                    </button>
+                    <div class="mega-menu" id="megaMenu" inert>
+                        <div class="mega-menu__inner">
+                            <aside class="mega-menu__sidebar">
+                                <p class="sidebar__label">Toutes les catégories</p>
+                                <ul class="sidebar__list" role="list"></ul>
+                            </aside>
+                            <div class="mega-menu__content"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="hbtm_left1">
-                    <a href="pages/messaging/upcoming-events.html">up caming event</a>
+                    <a href="/avena/pages/messaging/get-services.html">Get a Services</a>
                 </div>
                 <div class="hbtm_left1">
-                    <a href="/avena/pages/membership.html"><p>Avena.com Membership</p></a>
+                    <a href="/avena/pages/messaging/upcoming-events.html">Upcoming Events</a>
+                </div>
+                <div class="hbtm_left1">
+                    <a href="/avena/pages/marketplace.html">Marketplace</a>
                 </div>
             </div>
             <div class="hbtm_right">
                 <div class="hbtm_left1">
-                     <a href="/avena/pages/sell.html">sell</a>
+                    <a href="/avena/pages/sell.html">Sell</a>
                 </div>
                 <div class="hbtm_left1">
-                     <a href="pages/service-create.html">offer a Services</a>
+                    <a href="/avena/pages/service-create.html">Offer a Service</a>
                 </div>
                 <div class="hbtm_left1">
-                     <a href="pages/event-create.html">add event</a>
+                    <a href="/avena/pages/event-create.html">Add event</a>
                 </div>
                 <div class="hbtm_left1">
-                    <p>Become a supplier</p>
+                    <a href="/avena/pages/dashboard.html">Dashboard</a>
                 </div>
             </div>
         </div>
     </header>
-</header>
-<div class="mega-menu-backdrop" id="menuBackdrop"></div>
+    <div class="mega-menu-backdrop" id="menuBackdrop"></div>
+
+    <!-- Auth UI géré par avenna-header.js → _updateAuthUI() -->
+   <script>
+  const session = localStorage.getItem('avena_session');
+  const user = session ? JSON.parse(session) : null;
+  const authBtn = document.getElementById('authButton');
+  const userMenu = document.getElementById('userMenu');
+  const userAvatar = document.getElementById('userAvatar');
+
+  function updateHeaderAvatar(avatarUrl, initial) {
+    if (!userAvatar) return;
+    if (avatarUrl) {
+      // Afficher une image
+      userAvatar.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = avatarUrl;
+      img.style.width = '36px';
+      img.style.height = '36px';
+      img.style.borderRadius = '50%';
+      img.style.objectFit = 'cover';
+      userAvatar.appendChild(img);
+    } else {
+      // Afficher l'initiale
+      userAvatar.textContent = initial || 'U';
+    }
+  }
+
+  if (user && user.first_name) {
+    if (authBtn) authBtn.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'block';
+    updateHeaderAvatar(user.avatar_url, user.first_name.charAt(0).toUpperCase());
+  } else {
+    if (authBtn) authBtn.style.display = 'flex';
+    if (userMenu) userMenu.style.display = 'none';
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/index.html';
+    });
+  }
+</script>
+</body>
+</html>

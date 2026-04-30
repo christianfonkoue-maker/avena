@@ -30,9 +30,16 @@ const ProductsDB = {
   },
   
   async getById(id) {
-    const all = await this.getAll();
-    return all.find(p => p.id === id) || null;
-  },
+  try {
+    const response = await fetch(`http://localhost:5000/api/products/${id}`);
+    if (!response.ok) throw new Error('Product not found');
+    const data = await response.json();
+    return data.product;
+  } catch (error) {
+    console.error('Error loading product:', error);
+    return null;
+  }
+},
   
   save(product) {
     const local = this._getLocal();
@@ -141,29 +148,9 @@ class Products {
   }
   
   /* ── GET ALL ── */
-  static async getAll(filters = {}) {
-    let products = await ProductsDB.getAll();
-    if (filters.category) {
-      products = products.filter(p => p.category === filters.category);
-    }
-    if (filters.subcategory) {
-      products = products.filter(p => p.subcategory === filters.subcategory);
-    }
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      products = products.filter(p => 
-        p.title.toLowerCase().includes(q) || 
-        p.description.toLowerCase().includes(q)
-      );
-    }
-    if (filters.minPrice) {
-      products = products.filter(p => p.price >= filters.minPrice);
-    }
-    if (filters.maxPrice) {
-      products = products.filter(p => p.price <= filters.maxPrice);
-    }
-    return products;
-  }
+  static async getAll() {
+  return ProductsDB.getAll();
+}
   
   static async getById(id) {
     return ProductsDB.getById(id);

@@ -72,11 +72,12 @@
   const alertError = document.getElementById('alertError');
   const alertOk    = document.getElementById('alertSuccess');
 
-  // Redirect if already logged in
-  if (Session.isLoggedIn()) {
-    const p = new URLSearchParams(location.search).get('redirect') || '../../index.html';
-    location.href = p;
-  }
+  // // Redirect if already logged in
+  // if (Session.isLoggedIn()) {
+  //   const p = new URLSearchParams(location.search).get('redirect') || '../../index.html';
+  //   location.href = p;
+  // }
+  // jai comenter
 
   // Detect university on email input
   emailInput.addEventListener('input', () => {

@@ -9,17 +9,27 @@
 const ServicesDB = {
   KEY: 'avena_services_local',
   async getAll() {
-    const local = this._local();
-    try {
-const res = await fetch('/avena/data/mock/services.json')
-      const mock = await res.json();
-      const map  = {};
-      mock.forEach(s=>map[s.id]=s);
-      local.forEach(s=>map[s.id]=s);
-      return Object.values(map);
-    } catch { return local; }
-  },
-  async getById(id) { return (await this.getAll()).find(s=>s.id===id)??null; },
+  try {
+    const response = await fetch('http://localhost:5000/api/services');
+    if (!response.ok) throw new Error('Failed to fetch services');
+    const data = await response.json();
+    return data.services;
+  } catch (error) {
+    console.error('Error loading services from API:', error);
+    return this._local(); // fallback
+  }
+},
+ async getById(id) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/services/${id}`);
+    if (!response.ok) throw new Error('Service not found');
+    const data = await response.json();
+    return data.service;
+  } catch (error) {
+    console.error('Error loading service:', error);
+    return null;
+  }
+},
   save(svc) {
     const list=this._local();
     const i=list.findIndex(s=>s.id===svc.id);
@@ -35,40 +45,65 @@ class Services {
   static CATEGORIES = ['IT','Medicine','Finance','Arts','Sport','Engineering','Law','Other'];
 
   static async create(data, user) {
-    if (!user) return { ok:false, error:'Login required.' };
-    const { title, description, category, price, priceType, deliveryDays, images } = data;
-    if (!title||!description||!category||!price)
-      return { ok:false, error:'Please fill in all required fields.' };
-
-    const svc = {
-      id:           `svc_${Date.now()}`,
-      title:        title.trim(),
-      description:  description.trim(),
-      category,
-      subcategory:  data.subcategory||'',
-      provider:     { id:user.id, name:`${user.firstName} ${user.lastName}`, university:user.universityId, avatar:user.avatar||null },
-      price:        Number(price),
-      priceType:    priceType||'fixed',
-      currency:     'GHS',
-      deliveryDays: deliveryDays ? Number(deliveryDays) : null,
-      rating:       0,
-      reviews:      0,
-      images:       images?.length ? images : [`https://placehold.co/600x400/4361ee/fff?text=${encodeURIComponent(title)}`],
-      coverImage:   images?.[0] || `https://placehold.co/600x400/4361ee/fff?text=${encodeURIComponent(title)}`,
-      tags:         [category.toLowerCase()],
-      status:       'active',
-      createdAt:    new Date().toISOString(),
-    };
-    ServicesDB.save(svc);
-    return { ok:true, service:svc, message:'Service published!' };
+  if (!user) return { ok: false, error: 'Login required.' };
+  
+  // Récupérer le token
+  const token = localStorage.getItem('avena_token');
+  if (!token) {
+    return { ok: false, error: 'You are not logged in. Please login again.' };
   }
+  
+  const { title, description, category, subcategory, price, priceType, deliveryDays, images } = data;
+  
+  if (!title || !description || !category || !price) {
+    return { ok: false, error: 'Please fill in all required fields.' };
+  }
+  
+  try {
+    const response = await fetch('http://localhost:5000/api/services', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        title: title.trim(),
+        description: description.trim(),
+        category,
+        subcategory: subcategory || '',
+        price: Number(price),
+        priceType: priceType || 'fixed',
+        deliveryDays: deliveryDays ? Number(deliveryDays) : null,
+        coverImage: images?.[0] || null
+      })
+    });
+    
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Creation failed');
+    
+    return { ok: true, service: result.service, message: 'Service published!' };
+  } catch (error) {
+    console.error('Create service error:', error);
+    return { ok: false, error: error.message };
+  }
+}
 
-  static async getAll(filters={}) {
-    let list = await ServicesDB.getAll();
-    if (filters.category) list=list.filter(s=>s.category===filters.category);
-    if (filters.search){ const t=filters.search.toLowerCase(); list=list.filter(s=>s.title.toLowerCase().includes(t)||s.description.toLowerCase().includes(t)); }
+  static async getAll(filters = {}) {
+  try {
+    const response = await fetch('http://localhost:5000/api/services');
+    const data = await response.json();
+    let list = data.services;
+    if (filters.category) list = list.filter(s => s.category === filters.category);
+    if (filters.search) {
+      const t = filters.search.toLowerCase();
+      list = list.filter(s => s.title.toLowerCase().includes(t) || s.description.toLowerCase().includes(t));
+    }
     return list;
+  } catch (error) {
+    console.error('Error loading services:', error);
+    return [];
   }
+}
 
   static async getById(id) { return ServicesDB.getById(id); }
   static delete(id,user){ if(!user) return{ok:false,error:'Not authenticated.'}; ServicesDB.delete(id); return{ok:true}; }

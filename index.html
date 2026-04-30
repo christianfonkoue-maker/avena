@@ -8,15 +8,22 @@
     <link rel="stylesheet" href="assets/css/global.css">
 </head>
 <body>
-    <!-- Header est maintenant injecté automatiquement par Web Component -->
-    <!-- pas besoin de le dupliquer ici -->
+    <!-- Header est injecté automatiquement -->
     
     <div id="product-grid-home" data-pg-source="mock" data-pg-limit="24"></div>
-    
-    <!-- Footer est injecté automatiquement -->
     
     <script src="assets/js/mega-menu.js"></script>
     <script src="assets/js/modules/product-grid.js"></script>
     <script src="assets/js/components-loader.js" type="module"></script>
+    <!-- <script>
+    // Supprimer les sessions et tokens au chargement de la page d'accueil
+    localStorage.removeItem('avena_session');
+    localStorage.removeItem('avena_token');
+    sessionStorage.removeItem('avena_token');
+    sessionStorage.removeItem('avena_verify_email');
+    sessionStorage.removeItem('avena_2fa_email');
+    console.log('✅ Session supprimée');
+</script> -->
+
 </body>
 </html>

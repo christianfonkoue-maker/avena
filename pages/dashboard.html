@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Avena</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/avena/assets/css/global.css">
   <style>
     :root {
       --dashboard-bg: #f4f6fb;
@@ -26,7 +26,6 @@
       padding: 0 24px;
     }
 
-    /* Welcome Header */
     .welcome-header {
       background: linear-gradient(135deg, var(--primary) 0%, #5a67d8 100%);
       border-radius: 20px;
@@ -37,9 +36,6 @@
     .welcome-header h1 {
       font-size: 1.6rem;
       margin-bottom: 8px;
-    }
-    .welcome-header p {
-      opacity: 0.9;
     }
     .stats-grid {
       display: grid;
@@ -64,7 +60,6 @@
       margin-top: 4px;
     }
 
-    /* Tabs */
     .dashboard-tabs {
       display: flex;
       gap: 8px;
@@ -92,7 +87,6 @@
       color: white;
     }
 
-    /* Tab Content */
     .tab-content {
       display: none;
       animation: fadeIn 0.3s ease;
@@ -105,7 +99,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Cards Layout */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -180,7 +173,6 @@
       color: var(--success);
     }
 
-    /* Messages List */
     .messages-list {
       background: var(--card-bg);
       border-radius: 16px;
@@ -215,7 +207,6 @@
       color: var(--text-muted);
     }
 
-    /* Profile Form */
     .profile-form {
       background: var(--card-bg);
       border-radius: 16px;
@@ -298,7 +289,6 @@
 
 <div class="dashboard-container">
 
-  <!-- Welcome Header with Stats -->
   <div class="welcome-header" id="welcomeHeader">
     <h1>Welcome back, <span id="userName">Student</span>!</h1>
     <p>Here's what's happening with your campus activity.</p>
@@ -322,7 +312,6 @@
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="dashboard-tabs">
     <button class="tab-btn active" data-tab="overview">📊 Overview</button>
     <button class="tab-btn" data-tab="products">📦 My Products</button>
@@ -332,23 +321,22 @@
     <button class="tab-btn" data-tab="profile">👤 Profile</button>
   </div>
 
-  <!-- Tab: Overview -->
   <div class="tab-content active-tab" id="tab-overview">
     <div class="items-grid">
       <div class="item-card" style="background:linear-gradient(135deg,var(--primary),#5a67d8);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-plus-circle" style="font-size:2rem"></i>
         <h3>Sell something new</h3>
-        <a href="/pages/sell.html" style="background:white;color:var(--primary);padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Start Selling →</a>
+        <a href="/avena/pages/sell.html" style="background:white;color:var(--primary);padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Start Selling →</a>
       </div>
       <div class="item-card" style="background:linear-gradient(135deg,#38a169,#48bb78);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-handshake" style="font-size:2rem"></i>
         <h3>Offer a service</h3>
-        <a href="/pages/service-create.html" style="background:white;color:#38a169;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Get Started →</a>
+        <a href="/avena/pages/service-create.html" style="background:white;color:#38a169;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Get Started →</a>
       </div>
       <div class="item-card" style="background:linear-gradient(135deg,#ecc94b,#f6ad55);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-calendar-plus" style="font-size:2rem"></i>
         <h3>Create an event</h3>
-        <a href="/pages/event-create.html" style="background:white;color:#ecc94b;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Create Event →</a>
+        <a href="/avena//pages/event-create.html" style="background:white;color:#ecc94b;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Create Event →</a>
       </div>
     </div>
     <div style="margin-top:24px;background:var(--card-bg);border-radius:16px;padding:20px;border:1px solid var(--border)">
@@ -361,318 +349,278 @@
     </div>
   </div>
 
-  <!-- Tab: My Products -->
   <div class="tab-content" id="tab-products">
-    <div class="items-grid" id="productsGrid">
-      <div class="empty-state">Loading your products...</div>
-    </div>
+    <div class="items-grid" id="productsGrid"><div class="empty-state">Loading your products...</div></div>
   </div>
 
-  <!-- Tab: My Services -->
   <div class="tab-content" id="tab-services">
-    <div class="items-grid" id="servicesGrid">
-      <div class="empty-state">Loading your services...</div>
-    </div>
+    <div class="items-grid" id="servicesGrid"><div class="empty-state">Loading your services...</div></div>
   </div>
 
-  <!-- Tab: My Events -->
   <div class="tab-content" id="tab-events">
-    <div class="items-grid" id="eventsGrid">
-      <div class="empty-state">Loading your events...</div>
-    </div>
+    <div class="items-grid" id="eventsGrid"><div class="empty-state">Loading your events...</div></div>
   </div>
 
-  <!-- Tab: Messages -->
   <div class="tab-content" id="tab-messages">
-    <div class="messages-list" id="messagesList">
-      <div class="empty-state">Loading messages...</div>
-    </div>
+    <div class="messages-list" id="messagesList"><div class="empty-state">Loading messages...</div></div>
   </div>
 
-  <!-- Tab: Profile -->
   <div class="tab-content" id="tab-profile">
     <div class="profile-form">
       <div class="profile-avatar">
         <img id="profileAvatar" src="" alt="Avatar">
         <div>
-          <button class="avatar-upload-btn" id="uploadAvatarBtn">
-            <i class="fa-solid fa-camera"></i> Change Photo
-          </button>
+          <button class="avatar-upload-btn" id="uploadAvatarBtn"><i class="fa-solid fa-camera"></i> Change Photo</button>
           <input type="file" id="avatarInput" accept="image/*" style="display:none">
           <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px">Only your profile photo can be changed</p>
         </div>
       </div>
-      
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input type="text" id="profileFirstName" class="form-input" disabled>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input type="text" id="profileLastName" class="form-input" disabled>
-        </div>
+        <div class="form-group"><label class="form-label">First Name</label><input type="text" id="profileFirstName" class="form-input" disabled></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input type="text" id="profileLastName" class="form-input" disabled></div>
       </div>
-      
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" id="profileEmail" class="form-input" disabled>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">Student ID</label>
-        <input type="text" id="profileStudentId" class="form-input" disabled>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">University</label>
-        <input type="text" id="profileUniversity" class="form-input" disabled>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">Program / Major</label>
-        <input type="text" id="profileProgram" class="form-input" disabled>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">Year of Study</label>
-        <input type="text" id="profileYear" class="form-input" disabled>
-      </div>
-      
+      <div class="form-group"><label class="form-label">Email</label><input type="email" id="profileEmail" class="form-input" disabled></div>
+      <div class="form-group"><label class="form-label">Student ID</label><input type="text" id="profileStudentId" class="form-input" disabled></div>
+      <div class="form-group"><label class="form-label">University</label><input type="text" id="profileUniversity" class="form-input" disabled></div>
+      <div class="form-group"><label class="form-label">Program / Major</label><input type="text" id="profileProgram" class="form-input" disabled></div>
+      <div class="form-group"><label class="form-label">Year of Study</label><input type="text" id="profileYear" class="form-input" disabled></div>
       <button class="btn-save" id="saveProfileBtn" style="display:none">Save Changes</button>
     </div>
   </div>
 
 </div>
 
-<script src="/assets/js/mega-menu.js"></script>
-<script src="/assets/js/modules/auth.js"></script>
-<script src="/assets/js/modules/messaging.js"></script>
-<script src="/assets/js/components-loader.js" type="module"></script>
+<script src="/avena/assets/js/mega-menu.js"></script>
+<script src="/avena/assets/js/modules/auth.js"></script>
+<script src="/avena/assets/js/components-loader.js" type="module"></script>
 
 <script>
 (function() {
-  // Guard: must be logged in
-  const user = Auth.guard();
-  if (!user) return;
-  
-  // Update welcome message
-  document.getElementById('userName').textContent = user.firstName || 'Student';
-  
-  // Stats
+  const user = Session.get();
+  if (!user) {
+    window.location.href = '/avena/pages/auth/login.html?redirect=' + encodeURIComponent(location.pathname);
+    return;
+  }
+
+  document.getElementById('userName').textContent = user.first_name || 'Student';
+
+  // Helper fetch avec token
+  const token = localStorage.getItem('avena_token');
+  const headers = { 'Authorization': `Bearer ${token}` };
+
+  async function fetchAPI(url) {
+    const res = await fetch(url, { headers });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data;
+  }
+
   async function loadStats() {
-    const allProducts = await Products.getAll();
-    const myProducts = allProducts.filter(p => p.seller?.id === user.id);
-    const myServices = await Services.getAll().then(s => s.filter(svc => svc.provider?.id === user.id));
-    const myEvents = await Events.getAll().then(e => e.filter(evt => evt.organizer?.id === user.id));
-    const unread = Messaging.totalUnread(user.id);
-    
-    document.getElementById('statsProducts').textContent = myProducts.length;
-    document.getElementById('statsServices').textContent = myServices.length;
-    document.getElementById('statsEvents').textContent = myEvents.length;
-    document.getElementById('statsMessages').textContent = unread;
+    try {
+      const [products, services, events] = await Promise.all([
+        fetchAPI('http://localhost:5000/api/products/me'),
+        fetchAPI('http://localhost:5000/api/services/me'),
+        fetchAPI('http://localhost:5000/api/events/me')
+      ]);
+      document.getElementById('statsProducts').textContent = products.products?.length || 0;
+      document.getElementById('statsServices').textContent = services.services?.length || 0;
+      document.getElementById('statsEvents').textContent = events.events?.length || 0;
+      const unread = await fetchAPI('http://localhost:5000/api/messages/unread-count');
+      document.getElementById('statsMessages').textContent = unread.count || 0;
+    } catch (err) {
+      console.error('Stats error:', err);
+    }
   }
-  
-  // Load My Products
+
   async function loadMyProducts() {
-    const allProducts = await Products.getAll();
-    const myProducts = allProducts.filter(p => p.seller?.id === user.id);
     const grid = document.getElementById('productsGrid');
-    
-    if (myProducts.length === 0) {
-      grid.innerHTML = '<div class="empty-state">📦 You haven\'t listed any products yet. <a href="/pages/sell.html" style="color:#4361ee">Start selling →</a></div>';
-      return;
-    }
-    
-    grid.innerHTML = myProducts.map(p => `
-      <div class="item-card">
-        <div class="item-card__image">
-          <img src="${p.coverImage}" alt="${p.title}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Product'">
-        </div>
-        <div class="item-card__body">
-          <div class="item-card__title">${escapeHtml(p.title)}</div>
-          <div class="item-card__price">GHS ${p.price.toFixed(2)}</div>
-          <div class="item-card__meta">Stock: ${p.stock} | MOQ: ${p.moq}</div>
-          <div class="item-card__actions">
-            <button class="btn-sm btn-edit" data-id="${p.id}" data-type="product">Edit</button>
-            <button class="btn-sm btn-delete" data-id="${p.id}" data-type="product">Delete</button>
-            <button class="btn-sm btn-view" data-id="${p.id}" data-type="product">View</button>
+    try {
+      const data = await fetchAPI('http://localhost:5000/api/products/me');
+      const products = data.products || [];
+      if (!products.length) {
+        grid.innerHTML = '<div class="empty-state">📦 No products yet. <a href="/pages/sell.html">Start selling →</a></div>';
+        return;
+      }
+      grid.innerHTML = products.map(p => `
+        <div class="item-card">
+          <div class="item-card__image"><img src="${p.cover_image || 'https://placehold.co/400x400/4361ee/fff?text=Product'}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Product'"></div>
+          <div class="item-card__body">
+            <div class="item-card__title">${escapeHtml(p.title)}</div>
+            <div class="item-card__price">GHS ${Number(p.price).toFixed(2)}</div>
+            <div class="item-card__meta">Stock: ${p.stock}</div>
+            <div class="item-card__actions">
+              <button class="btn-sm btn-edit" data-id="${p.id}" data-type="product">Edit</button>
+              <button class="btn-sm btn-delete" data-id="${p.id}" data-type="product">Delete</button>
+              <button class="btn-sm btn-view" data-id="${p.id}" data-type="product">View</button>
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
-    
-    attachItemActions();
+      `).join('');
+      attachItemActions();
+    } catch { grid.innerHTML = '<div class="empty-state">Error loading products</div>'; }
   }
-  
-  // Load My Services
+
   async function loadMyServices() {
-    const allServices = await Services.getAll();
-    const myServices = allServices.filter(s => s.provider?.id === user.id);
     const grid = document.getElementById('servicesGrid');
-    
-    if (myServices.length === 0) {
-      grid.innerHTML = '<div class="empty-state">🛠️ You haven\'t offered any services yet. <a href="/pages/service-create.html" style="color:#4361ee">Offer a service →</a></div>';
-      return;
-    }
-    
-    grid.innerHTML = myServices.map(s => `
-      <div class="item-card">
-        <div class="item-card__image">
-          <img src="${s.coverImage}" alt="${s.title}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Service'">
-        </div>
-        <div class="item-card__body">
-          <div class="item-card__title">${escapeHtml(s.title)}</div>
-          <div class="item-card__price">${Services.formatPrice(s)}</div>
-          <div class="item-card__meta">⭐ ${s.rating} (${s.reviews} reviews)</div>
-          <div class="item-card__actions">
-            <button class="btn-sm btn-edit" data-id="${s.id}" data-type="service">Edit</button>
-            <button class="btn-sm btn-delete" data-id="${s.id}" data-type="service">Delete</button>
-            <button class="btn-sm btn-view" data-id="${s.id}" data-type="service">View</button>
+    try {
+      const data = await fetchAPI('http://localhost:5000/api/services/me');
+      const services = data.services || [];
+      if (!services.length) {
+        grid.innerHTML = '<div class="empty-state">🛠️ No services yet. <a href="/pages/service-create.html">Offer a service →</a></div>';
+        return;
+      }
+      grid.innerHTML = services.map(s => `
+        <div class="item-card">
+          <div class="item-card__image"><img src="${s.cover_image || 'https://placehold.co/400x400/4361ee/fff?text=Service'}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Service'"></div>
+          <div class="item-card__body">
+            <div class="item-card__title">${escapeHtml(s.title)}</div>
+            <div class="item-card__price">GHS ${Number(s.price).toFixed(2)}</div>
+            <div class="item-card__meta">⭐ ${s.rating} (${s.reviews_count})</div>
+            <div class="item-card__actions">
+              <button class="btn-sm btn-edit" data-id="${s.id}" data-type="service">Edit</button>
+              <button class="btn-sm btn-delete" data-id="${s.id}" data-type="service">Delete</button>
+              <button class="btn-sm btn-view" data-id="${s.id}" data-type="service">View</button>
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
-    
-    attachItemActions();
+      `).join('');
+      attachItemActions();
+    } catch { grid.innerHTML = '<div class="empty-state">Error loading services</div>'; }
   }
-  
-  // Load My Events
+
   async function loadMyEvents() {
-    const allEvents = await Events.getAll();
-    const myEvents = allEvents.filter(e => e.organizer?.id === user.id);
     const grid = document.getElementById('eventsGrid');
-    
-    if (myEvents.length === 0) {
-      grid.innerHTML = '<div class="empty-state">📅 You haven\'t created any events yet. <a href="/pages/event-create.html" style="color:#4361ee">Create an event →</a></div>';
-      return;
-    }
-    
-    grid.innerHTML = myEvents.map(e => `
-      <div class="item-card">
-        <div class="item-card__image">
-          <img src="${e.coverImage}" alt="${e.title}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Event'">
-        </div>
-        <div class="item-card__body">
-          <div class="item-card__title">${escapeHtml(e.title)}</div>
-          <div class="item-card__price">${Events.formatPrice(e.price)}</div>
-          <div class="item-card__meta">📅 ${Events.formatDate(e.date)} | 👥 ${e.registered}/${e.capacity || '∞'}</div>
-          <div class="item-card__actions">
-            <button class="btn-sm btn-edit" data-id="${e.id}" data-type="event">Edit</button>
-            <button class="btn-sm btn-delete" data-id="${e.id}" data-type="event">Delete</button>
-            <button class="btn-sm btn-view" data-id="${e.id}" data-type="event">View</button>
+    try {
+      const data = await fetchAPI('http://localhost:5000/api/events/me');
+      const events = data.events || [];
+      if (!events.length) {
+        grid.innerHTML = '<div class="empty-state">📅 No events yet. <a href="/pages/event-create.html">Create an event →</a></div>';
+        return;
+      }
+      grid.innerHTML = events.map(e => `
+        <div class="item-card">
+          <div class="item-card__image"><img src="${e.cover_image || 'https://placehold.co/400x400/4361ee/fff?text=Event'}" onerror="this.src='https://placehold.co/400x400/4361ee/fff?text=Event'"></div>
+          <div class="item-card__body">
+            <div class="item-card__title">${escapeHtml(e.title)}</div>
+            <div class="item-card__price">${e.is_paid ? `GHS ${e.price}` : 'Free'}</div>
+            <div class="item-card__meta">📅 ${new Date(e.date).toLocaleDateString()} | 👥 ${e.registered_count}/${e.capacity || '∞'}</div>
+            <div class="item-card__actions">
+              <button class="btn-sm btn-edit" data-id="${e.id}" data-type="event">Edit</button>
+              <button class="btn-sm btn-delete" data-id="${e.id}" data-type="event">Delete</button>
+              <button class="btn-sm btn-view" data-id="${e.id}" data-type="event">View</button>
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
-    
-    attachItemActions();
+      `).join('');
+      attachItemActions();
+    } catch { grid.innerHTML = '<div class="empty-state">Error loading events</div>'; }
   }
-  
+
   function attachItemActions() {
     document.querySelectorAll('.btn-edit').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const type = btn.dataset.type;
-        if (type === 'product') window.location.href = `/pages/sell.html?edit=${id}`;
-        if (type === 'service') window.location.href = `/pages/service-create.html?edit=${id}`;
-        if (type === 'event') window.location.href = `/pages/event-create.html?edit=${id}`;
+        const id = btn.dataset.id, type = btn.dataset.type;
+        if (type === 'product') location.href = `/pages/sell.html?edit=${id}`;
+        if (type === 'service') location.href = `/pages/service-create.html?edit=${id}`;
+        if (type === 'event') location.href = `/pages/event-create.html?edit=${id}`;
       });
     });
-    
     document.querySelectorAll('.btn-delete').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const type = btn.dataset.type;
-        if (confirm('Are you sure? This cannot be undone.')) {
-          if (type === 'product') Products.delete(id, user);
-          if (type === 'service') Services.delete(id, user);
-          if (type === 'event') Events.delete(id, user);
-          location.reload();
-        }
+        const id = btn.dataset.id, type = btn.dataset.type;
+        if (!confirm('Delete this item? This cannot be undone.')) return;
+        let url = '';
+        if (type === 'product') url = `http://localhost:5000/api/products/${id}`;
+        if (type === 'service') url = `http://localhost:5000/api/services/${id}`;
+        if (type === 'event') url = `http://localhost:5000/api/events/${id}`;
+        await fetch(url, { method: 'DELETE', headers });
+        location.reload();
       });
     });
-    
     document.querySelectorAll('.btn-view').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const type = btn.dataset.type;
-        if (type === 'product') window.location.href = `/pages/product.html?id=${id}`;
-        if (type === 'service') window.location.href = `/pages/service.html?id=${id}`;
-        if (type === 'event') window.location.href = `/pages/event.html?id=${id}`;
+        const id = btn.dataset.id, type = btn.dataset.type;
+        if (type === 'product') location.href = `/pages/product.html?id=${id}`;
+        if (type === 'service') location.href = `/pages/service.html?id=${id}`;
+        if (type === 'event') location.href = `/pages/event.html?id=${id}`;
       });
     });
   }
-  
-  // Load Messages
-  function loadMessages() {
-    const convs = Messaging.getConversations(user.id);
+
+  async function loadMessages() {
     const container = document.getElementById('messagesList');
-    
-    if (convs.length === 0) {
-      container.innerHTML = '<div class="empty-state">💬 No messages yet.</div>';
-      return;
-    }
-    
-    container.innerHTML = convs.map(c => `
-      <div class="message-item ${c.unread > 0 ? 'unread' : ''}" data-user-id="${c.otherId}">
-        <div>
-          <div class="message-sender">${escapeHtml(c.otherName)}</div>
-          <div class="message-preview">${escapeHtml(c.lastMsg.body.substring(0, 60))}${c.lastMsg.body.length > 60 ? '...' : ''}</div>
+    try {
+      const data = await fetchAPI('http://localhost:5000/api/messages/conversations');
+      const convs = data.conversations || [];
+      if (!convs.length) { container.innerHTML = '<div class="empty-state">💬 No messages yet.</div>'; return; }
+      container.innerHTML = convs.map(c => `
+        <div class="message-item ${c.unreadCount > 0 ? 'unread' : ''}" data-user-id="${c.otherUser.id}">
+          <div><div class="message-sender">${escapeHtml(c.otherUser.name)}</div><div class="message-preview">${escapeHtml(c.lastMessage?.substring(0, 60) || '')}</div></div>
+          <div class="message-time">${new Date(c.lastMessageAt).toLocaleString()}</div>
         </div>
-        <div class="message-time">${Messaging.formatTime(c.lastMsg.sentAt)}</div>
-      </div>
-    `).join('');
-    
-    container.querySelectorAll('.message-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const userId = item.dataset.userId;
-        window.location.href = `/pages/messaging/conversation.html?userId=${userId}`;
+      `).join('');
+      container.querySelectorAll('.message-item').forEach(item => {
+        item.addEventListener('click', () => location.href = `/pages/messaging/conversation.html?userId=${item.dataset.userId}`);
       });
-    });
+    } catch { container.innerHTML = '<div class="empty-state">Error loading messages</div>'; }
   }
-  
-  // Profile
+
   function loadProfile() {
-    document.getElementById('profileAvatar').src = user.avatar || `https://placehold.co/80x80/4361ee/fff?text=${user.firstName?.charAt(0) || 'U'}`;
-    document.getElementById('profileFirstName').value = user.firstName || '';
-    document.getElementById('profileLastName').value = user.lastName || '';
+    document.getElementById('profileAvatar').src = user.avatar_url || `https://placehold.co/80x80/4361ee/fff?text=${(user.first_name?.charAt(0) || 'U')}`;
+    document.getElementById('profileFirstName').value = user.first_name || '';
+    document.getElementById('profileLastName').value = user.last_name || '';
     document.getElementById('profileEmail').value = user.email || '';
-    document.getElementById('profileStudentId').value = user.studentId || '';
-    document.getElementById('profileUniversity').value = user.universityId || 'University';
+    document.getElementById('profileStudentId').value = user.student_id || '';
+    document.getElementById('profileUniversity').value = user.university_name || 'University';
     document.getElementById('profileProgram').value = user.program || 'Not specified';
     document.getElementById('profileYear').value = user.year || 'Not specified';
   }
+
+  document.getElementById('uploadAvatarBtn').addEventListener('click', () => document.getElementById('avatarInput').click());
+document.getElementById('avatarInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('avatar', file);
+  const token = localStorage.getItem('avena_token');
   
-  // Avatar upload
-  function readFileAsDataURL(file) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
-      reader.readAsDataURL(file);
-    });
-  }
-  
-  document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
-    document.getElementById('avatarInput').click();
+  const res = await fetch('http://localhost:5000/api/users/avatar', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData
   });
   
-  document.getElementById('avatarInput').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const dataUrl = await readFileAsDataURL(file);
-      user.avatar = dataUrl;
-      Session.set(user);
-      document.getElementById('profileAvatar').src = dataUrl;
-      alert('Profile photo updated!');
-      location.reload();
+  if (res.ok) {
+    const data = await res.json();
+    // Mettre à jour la session
+    const currentUser = Session.get();
+    currentUser.avatar_url = data.avatarUrl;
+    Session.set(currentUser);
+    
+    // Mettre à jour l'avatar dans le dashboard
+    document.getElementById('profileAvatar').src = data.avatarUrl;
+    
+    // Mettre à jour l'avatar dans le header (sans rechargement)
+    const headerAvatar = document.querySelector('#userAvatar');
+    if (headerAvatar) {
+      headerAvatar.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = data.avatarUrl;
+      img.style.width = '36px';
+      img.style.height = '36px';
+      img.style.borderRadius = '50%';
+      img.style.objectFit = 'cover';
+      headerAvatar.appendChild(img);
     }
-  });
-  
-  // Tabs
+    
+    alert('Avatar mis à jour !');
+  } else {
+    alert('Upload failed');
+  }
+});
+
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
-  
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const tabId = tab.dataset.tab;
@@ -680,26 +628,15 @@
       tab.classList.add('active');
       contents.forEach(c => c.classList.remove('active-tab'));
       document.getElementById(`tab-${tabId}`).classList.add('active-tab');
-      
-      // Load data when tab is opened
       if (tabId === 'products') loadMyProducts();
       if (tabId === 'services') loadMyServices();
       if (tabId === 'events') loadMyEvents();
       if (tabId === 'messages') loadMessages();
     });
   });
-  
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
-  
-  // Initial load
+
+  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m)); }
+
   loadStats();
   loadProfile();
 })();

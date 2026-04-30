@@ -87,7 +87,7 @@
         subject:`Service inquiry: ${svc.title}`,
         body:`Hi ${svc.provider.name.split(' ')[0]}, I'm interested in your service "${svc.title}". Can we discuss details?`,
       });
-      document.getElementById('alertInfo').innerHTML=`Message sent! <a href="../messaging/inbox.html" style="color:var(--accent);font-weight:600">Open inbox →</a>`;
+      document.getElementById('alertInfo').innerHTML=`Message sent! <a href="/avena/page/messaging/inbox.html" style="color:var(--accent);font-weight:600">Open inbox →</a>`;
       document.getElementById('alertInfo').classList.add('show');
       document.getElementById('contactBtn').disabled=true;
     });
