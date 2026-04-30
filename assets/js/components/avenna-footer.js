@@ -13,7 +13,7 @@ class AvennaFooter extends HTMLElement {
 
   async connectedCallback() {
     try {
-      const response = await fetch('/avena/components/footer.html');
+      const response = await fetch('/components/footer.html');
       let html = await response.text();
       
       // Remplacer l'année dynamiquement
@@ -21,7 +21,7 @@ class AvennaFooter extends HTMLElement {
       
       this.shadowRoot.innerHTML = `
         <style>
-          @import url('/avena/assets/css/global.css');
+          @import url('/assets/css/global.css');
           /* Styles supplémentaires pour le footer */
           .avenna-footer {
             background: #1a1d2e;

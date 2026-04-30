@@ -14,7 +14,7 @@ class AvennaHeader extends HTMLElement {
 
   async connectedCallback() {
     try {
-      const response = await fetch('/avena/components/header.html');
+      const response = await fetch('/components/header.html');
       const html = await response.text();
 
       // Injection dans le Light DOM
@@ -71,7 +71,7 @@ class AvennaHeader extends HTMLElement {
         localStorage.removeItem('avena_session');
         localStorage.removeItem('avena_token');
         sessionStorage.removeItem('avena_token');
-        window.location.href = '/avena/index.html';
+        window.location.href = '/index.html';
       });
     }
 

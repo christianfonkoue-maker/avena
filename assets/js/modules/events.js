@@ -54,7 +54,7 @@ const EventsDB = {
     const local = this._getLocal();
     try {
       /* PRODUCTION: replace with fetch('/api/events') */
-   const res = await fetch('/avena/data/mock/events.json')
+   const res = await fetch('/data/mock/events.json')
       const mock = await res.json();
       // Merge: local overrides mock by id
       const map  = {};

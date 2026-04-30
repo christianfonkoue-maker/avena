@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Avena</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/avena/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/global.css">
   <style>
     :root {
       --dashboard-bg: #f4f6fb;
@@ -326,17 +326,17 @@
       <div class="item-card" style="background:linear-gradient(135deg,var(--primary),#5a67d8);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-plus-circle" style="font-size:2rem"></i>
         <h3>Sell something new</h3>
-        <a href="/avena/pages/sell.html" style="background:white;color:var(--primary);padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Start Selling →</a>
+        <a href="/pages/sell.html" style="background:white;color:var(--primary);padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Start Selling →</a>
       </div>
       <div class="item-card" style="background:linear-gradient(135deg,#38a169,#48bb78);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-handshake" style="font-size:2rem"></i>
         <h3>Offer a service</h3>
-        <a href="/avena/pages/service-create.html" style="background:white;color:#38a169;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Get Started →</a>
+        <a href="/pages/service-create.html" style="background:white;color:#38a169;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Get Started →</a>
       </div>
       <div class="item-card" style="background:linear-gradient(135deg,#ecc94b,#f6ad55);color:white;text-align:center;justify-content:center;align-items:center;display:flex;flex-direction:column;gap:8px">
         <i class="fa-solid fa-calendar-plus" style="font-size:2rem"></i>
         <h3>Create an event</h3>
-        <a href="/avena//pages/event-create.html" style="background:white;color:#ecc94b;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Create Event →</a>
+        <a href="//pages/event-create.html" style="background:white;color:#ecc94b;padding:8px 20px;border-radius:40px;text-decoration:none;font-weight:700">Create Event →</a>
       </div>
     </div>
     <div style="margin-top:24px;background:var(--card-bg);border-radius:16px;padding:20px;border:1px solid var(--border)">
@@ -390,15 +390,15 @@
 
 </div>
 
-<script src="/avena/assets/js/mega-menu.js"></script>
-<script src="/avena/assets/js/modules/auth.js"></script>
-<script src="/avena/assets/js/components-loader.js" type="module"></script>
+<script src="/assets/js/mega-menu.js"></script>
+<script src="/assets/js/modules/auth.js"></script>
+<script src="/assets/js/components-loader.js" type="module"></script>
 
 <script>
 (function() {
   const user = Session.get();
   if (!user) {
-    window.location.href = '/avena/pages/auth/login.html?redirect=' + encodeURIComponent(location.pathname);
+    window.location.href = '/pages/auth/login.html?redirect=' + encodeURIComponent(location.pathname);
     return;
   }
 
