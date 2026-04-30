@@ -418,14 +418,14 @@
   async function loadStats() {
     try {
       const [products, services, events] = await Promise.all([
-        fetchAPI('http://localhost:5000/api/products/me'),
-        fetchAPI('http://localhost:5000/api/services/me'),
-        fetchAPI('http://localhost:5000/api/events/me')
+        fetchAPI('https://avena-backend-os8d.onrender.com/api/products/me'),
+        fetchAPI('https://avena-backend-os8d.onrender.com/api/services/me'),
+        fetchAPI('https://avena-backend-os8d.onrender.com/api/events/me')
       ]);
       document.getElementById('statsProducts').textContent = products.products?.length || 0;
       document.getElementById('statsServices').textContent = services.services?.length || 0;
       document.getElementById('statsEvents').textContent = events.events?.length || 0;
-      const unread = await fetchAPI('http://localhost:5000/api/messages/unread-count');
+      const unread = await fetchAPI('https://avena-backend-os8d.onrender.com/api/messages/unread-count');
       document.getElementById('statsMessages').textContent = unread.count || 0;
     } catch (err) {
       console.error('Stats error:', err);
@@ -435,7 +435,7 @@
   async function loadMyProducts() {
     const grid = document.getElementById('productsGrid');
     try {
-      const data = await fetchAPI('http://localhost:5000/api/products/me');
+      const data = await fetchAPI('https://avena-backend-os8d.onrender.com/api/products/me');
       const products = data.products || [];
       if (!products.length) {
         grid.innerHTML = '<div class="empty-state">📦 No products yet. <a href="/pages/sell.html">Start selling →</a></div>';
@@ -463,7 +463,7 @@
   async function loadMyServices() {
     const grid = document.getElementById('servicesGrid');
     try {
-      const data = await fetchAPI('http://localhost:5000/api/services/me');
+      const data = await fetchAPI('https://avena-backend-os8d.onrender.com/api/services/me');
       const services = data.services || [];
       if (!services.length) {
         grid.innerHTML = '<div class="empty-state">🛠️ No services yet. <a href="/pages/service-create.html">Offer a service →</a></div>';
@@ -491,7 +491,7 @@
   async function loadMyEvents() {
     const grid = document.getElementById('eventsGrid');
     try {
-      const data = await fetchAPI('http://localhost:5000/api/events/me');
+      const data = await fetchAPI('https://avena-backend-os8d.onrender.com/api/events/me');
       const events = data.events || [];
       if (!events.length) {
         grid.innerHTML = '<div class="empty-state">📅 No events yet. <a href="/pages/event-create.html">Create an event →</a></div>';
@@ -530,9 +530,9 @@
         const id = btn.dataset.id, type = btn.dataset.type;
         if (!confirm('Delete this item? This cannot be undone.')) return;
         let url = '';
-        if (type === 'product') url = `http://localhost:5000/api/products/${id}`;
-        if (type === 'service') url = `http://localhost:5000/api/services/${id}`;
-        if (type === 'event') url = `http://localhost:5000/api/events/${id}`;
+        if (type === 'product') url = `https://avena-backend-os8d.onrender.com/api/products/${id}`;
+        if (type === 'service') url = `https://avena-backend-os8d.onrender.com/api/services/${id}`;
+        if (type === 'event') url = `https://avena-backend-os8d.onrender.com/api/events/${id}`;
         await fetch(url, { method: 'DELETE', headers });
         location.reload();
       });
@@ -550,7 +550,7 @@
   async function loadMessages() {
     const container = document.getElementById('messagesList');
     try {
-      const data = await fetchAPI('http://localhost:5000/api/messages/conversations');
+      const data = await fetchAPI('https://avena-backend-os8d.onrender.com/api/messages/conversations');
       const convs = data.conversations || [];
       if (!convs.length) { container.innerHTML = '<div class="empty-state">💬 No messages yet.</div>'; return; }
       container.innerHTML = convs.map(c => `
@@ -584,7 +584,7 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
   formData.append('avatar', file);
   const token = localStorage.getItem('avena_token');
   
-  const res = await fetch('http://localhost:5000/api/users/avatar', {
+  const res = await fetch('https://avena-backend-os8d.onrender.com/api/users/avatar', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${token}` },
     body: formData

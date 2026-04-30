@@ -10,7 +10,7 @@ const ServicesDB = {
   KEY: 'avena_services_local',
   async getAll() {
   try {
-    const response = await fetch('http://localhost:5000/api/services');
+    const response = await fetch('https://avena-backend-os8d.onrender.com/api/services');
     if (!response.ok) throw new Error('Failed to fetch services');
     const data = await response.json();
     return data.services;
@@ -21,7 +21,7 @@ const ServicesDB = {
 },
  async getById(id) {
   try {
-    const response = await fetch(`http://localhost:5000/api/services/${id}`);
+    const response = await fetch(`https://avena-backend-os8d.onrender.com/api/services/${id}`);
     if (!response.ok) throw new Error('Service not found');
     const data = await response.json();
     return data.service;
@@ -60,7 +60,7 @@ class Services {
   }
   
   try {
-    const response = await fetch('http://localhost:5000/api/services', {
+    const response = await fetch('https://avena-backend-os8d.onrender.com/api/services', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ class Services {
 
   static async getAll(filters = {}) {
   try {
-    const response = await fetch('http://localhost:5000/api/services');
+    const response = await fetch('https://avena-backend-os8d.onrender.com/api/services');
     const data = await response.json();
     let list = data.services;
     if (filters.category) list = list.filter(s => s.category === filters.category);
