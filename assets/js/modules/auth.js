@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ============================================================
  *  AVENA — Auth Module
  *  assets/js/modules/auth.js
@@ -43,7 +43,7 @@ class Auth {
   
   static async getUniversityByEmail(email) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/categories/universities');
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/categories/universities');
       const universities = await response.json();
       const domain = email.split('@')[1]?.toLowerCase();
       return universities.find(u => u.domain === domain) || null;
@@ -59,7 +59,7 @@ class Auth {
   /* REGISTER */
   static async register({ firstName, lastName, email, studentId, password, confirmPassword, program, year }) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/register', {
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firstName, lastName, email, studentId, password, confirmPassword, program, year }),
@@ -79,7 +79,7 @@ class Auth {
   /* LOGIN */
  static async login(email, password) {
   try {
-    const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/login', {
+    const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -111,7 +111,7 @@ class Auth {
   /* VERIFY EMAIL */
   static async verifyEmail(email, code) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/verify-email', {
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/verify-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),
@@ -129,7 +129,7 @@ class Auth {
   /* FORGOT PASSWORD */
   static async forgotPassword(email) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/forgot-password', {
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -147,7 +147,7 @@ class Auth {
   /* RESET PASSWORD */
   static async resetPassword(email, token, newPassword) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/reset-password', {
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, newPassword }),
@@ -186,7 +186,7 @@ class Auth {
   /* RESEND CODE */
   static async resendVerification(email) {
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/auth/resend-verification', {
+      const response = await fetch('${window.APP_CONFIG.API_URL}/api/auth/resend-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

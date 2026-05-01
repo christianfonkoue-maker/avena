@@ -63,7 +63,18 @@
   </div>
   <div class="svc-grid" id="svcGrid"></div>
 </div>
+<script src="assets/js/config.js"></script>
 <script src="../../assets/js/modules/auth.js"></script>
+<script>
+  if (!window.APP_CONFIG) {
+    window.APP_CONFIG = {
+      isLocal: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
+      get API_URL() {
+        return this.isLocal ? 'http://localhost:5000' : 'https://avena-backend-os8d.onrender.com';
+      }
+    };
+  }
+</script>
 <script src="../../assets/js/modules/services.js"></script>
 <script>
 (function(){

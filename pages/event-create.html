@@ -131,12 +131,14 @@
   </div>
 </div>
 
+<script src="assets/js/config.js"></script>
 <script src="../assets/js/modules/auth.js"></script>
 <script src="../assets/js/modules/events.js"></script>
 <script>
 (function(){
   // Guard — must be logged in
   const user = Auth.guard();
+
   if (!user) return;
 
   const isPaidChk  = document.getElementById('isPaid');

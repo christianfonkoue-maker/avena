@@ -7,37 +7,47 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <style>
-    .product-container {
-      max-width: 1200px;
+    /* ===== PRODUCT PAGE STYLES ===== */
+    .product-page-container {
+      max-width: 1280px;
       margin: 40px auto;
-      padding: 0 20px;
+      padding: 0 24px;
     }
-    
-    .product-page {
+
+    .product-grid-2cols {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      grid-template-columns: 1fr 320px;
+      gap: 32px;
+    }
+
+    @media (max-width: 992px) {
+      .product-grid-2cols {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== MAIN PRODUCT ===== */
+    .product-main {
       background: white;
       border-radius: 20px;
       padding: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #eef2f6;
     }
-    
-    @media (max-width: 768px) {
-      .product-page { grid-template-columns: 1fr; }
-    }
-    
+
     /* Gallery */
     .product-gallery {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 20px;
+      margin-bottom: 24px;
     }
     .gallery-main {
+      flex: 1;
       aspect-ratio: 1 / 1;
-      background: #f7f8fc;
+      background: #f8fafc;
       border-radius: 16px;
       overflow: hidden;
+      border: 1px solid #eef2f6;
     }
     .gallery-main img {
       width: 100%;
@@ -45,118 +55,139 @@
       object-fit: cover;
     }
     .gallery-thumbs {
+      width: 80px;
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 12px;
     }
     .gallery-thumbs .thumb {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
       cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.2s, border 0.2s;
       border: 2px solid transparent;
+      transition: all 0.2s;
+      background: #f8fafc;
+      object-fit: cover;
     }
     .gallery-thumbs .thumb.active,
     .gallery-thumbs .thumb:hover {
-      opacity: 1;
       border-color: #4361ee;
+      transform: scale(0.98);
     }
-    
-    /* Info */
-    .product-info {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+
+    /* Product Info */
     .product-category {
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.05em;
       color: #4361ee;
-      font-weight: 700;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
     .product-title {
-      font-size: 1.6rem;
-      font-weight: 800;
+      font-size: 1.8rem;
+      font-weight: 700;
       color: #1a1d2e;
+      margin-bottom: 12px;
     }
     .product-price {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: #4361ee;
+      margin-bottom: 16px;
     }
-    .product-meta {
-      background: #f8f9fc;
-      padding: 16px;
-      border-radius: 12px;
-    }
-    .meta-row {
+    .product-rating {
       display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #e2e6f3;
-    }
-    .meta-row:last-child {
-      border-bottom: none;
-    }
-    .meta-label {
-      font-weight: 600;
-      color: #5c6080;
-    }
-    .meta-value {
-      color: #1a1d2e;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
     }
     .stars {
       color: #f5a623;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
     }
-    .product-description h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .review-link {
+      font-size: 0.8rem;
+      color: #7a7f9a;
     }
-    .product-description p {
-      line-height: 1.6;
+    .product-description {
       color: #5c6080;
+      line-height: 1.6;
+      margin-bottom: 24px;
     }
     .product-seller {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      background: #f8f9fc;
-      border-radius: 12px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      border: 1px solid #eef2f6;
+    }
+    .seller-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #4361ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
     }
     .seller-avatar img {
-      width: 50px;
-      height: 50px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
     }
     .seller-name {
       font-weight: 700;
+      color: #1a1d2e;
     }
     .seller-university {
       font-size: 0.8rem;
       color: #7a7f9a;
     }
+    .product-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 16px 0;
+      border-top: 1px solid #eef2f6;
+      border-bottom: 1px solid #eef2f6;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-size: 0.7rem;
+      color: #7a7f9a;
+      text-transform: uppercase;
+    }
+    .meta-value {
+      font-weight: 700;
+      color: #1a1d2e;
+    }
     .product-actions {
       display: flex;
       gap: 12px;
-      margin-top: 8px;
     }
     .btn-primary, .btn-secondary, .btn-danger {
       flex: 1;
-      padding: 12px 24px;
+      padding: 14px 24px;
       border-radius: 40px;
       font-weight: 700;
       cursor: pointer;
       border: none;
       transition: all 0.2s;
       text-align: center;
-      text-decoration: none;
     }
     .btn-primary {
       background: #4361ee;
@@ -174,6 +205,148 @@
       background: #e53e3e;
       color: white;
     }
+
+    /* ===== TABS ===== */
+    .product-tabs {
+      margin-top: 32px;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #eef2f6;
+      overflow: hidden;
+    }
+    .tabs-nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #eef2f6;
+      background: #f8fafc;
+    }
+    .tab-btn {
+      padding: 14px 24px;
+      background: none;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      color: #7a7f9a;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: #4361ee;
+      border-bottom: 2px solid #4361ee;
+      background: white;
+    }
+    .tab-content {
+      display: none;
+      padding: 24px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .product-sidebar {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #eef2f6;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eef2f6;
+    }
+    .recommendation-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .rec-item {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .rec-item:hover {
+      opacity: 0.8;
+    }
+    .rec-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background: #f8fafc;
+      object-fit: cover;
+    }
+    .rec-info {
+      flex: 1;
+    }
+    .rec-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .rec-price {
+      font-weight: 700;
+      color: #4361ee;
+      font-size: 0.8rem;
+    }
+    .rec-category {
+      font-size: 0.7rem;
+      color: #7a7f9a;
+    }
+
+    /* ===== RELATED PRODUCTS SECTION ===== */
+    .related-section {
+      margin-top: 48px;
+    }
+    .related-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .related-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #eef2f6;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .related-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+    .related-card-body {
+      padding: 12px;
+    }
+    .related-card-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    .related-card-price {
+      font-weight: 700;
+      color: #4361ee;
+      font-size: 0.9rem;
+    }
+
     .error-state {
       text-align: center;
       padding: 60px;
@@ -182,16 +355,310 @@
 </head>
 <body>
 
-  <div class="product-container">
-    <div id="product-details">
-      <div class="error-state">Loading product...</div>
-    </div>
+<div class="product-page-container">
+  <div id="product-details">
+    <div class="error-state">Loading product...</div>
   </div>
+</div>
+<script src="../assets/js/config.js"></script>
+<script src="/assets/js/modules/auth.js"></script>
+<script src="/assets/js/modules/messaging.js"></script>
+<script src="/assets/js/modules/chat.js"></script>
+<script src="/assets/js/modules/product.js"></script>
+<script src="/assets/js/components-loader.js" type="module"></script>
 
-  <script src="/assets/js/mega-menu.js"></script>
-  <script src="/assets/js/modules/auth.js"></script>
-  <script src="/assets/js/modules/messaging.js"></script>
-  <script src="/assets/js/modules/product.js"></script>
-  <script src="/assets/js/components-loader.js" type="module"></script>
+<script>
+// Rendu de la page produit
+async function renderProductPage() {
+  const params = new URLSearchParams(window.location.search);
+  let productId = params.get('id');
+  
+  // Support des slugs : /product/nom-produit-123
+  if (!productId && window.location.pathname.includes('/product/')) {
+    const slug = window.location.pathname.split('/').pop();
+    const match = slug.match(/-(\d+)$/);
+    if (match) productId = match[1];
+  }
+  
+  if (!productId) {
+    document.getElementById('product-details').innerHTML = '<div class="error-state">No product ID specified.</div>';
+    return;
+  }
+  
+  const product = await Products.getById(productId);
+  if (!product) {
+    document.getElementById('product-details').innerHTML = '<div class="error-state">Product not found.</div>';
+    return;
+  }
+  
+  const user = Session.get();
+  const isOwnProduct = user && product.seller?.id === user.id;
+  
+  // Générer les étoiles
+  const fullStars = Math.floor(product.rating || 0);
+  const halfStar = (product.rating || 0) % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  const starsHtml = '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+  
+  const html = `
+    <div class="product-grid-2cols">
+      <!-- MAIN PRODUCT -->
+      <div>
+        <div class="product-main">
+          <div class="product-gallery">
+            <div class="gallery-thumbs" id="galleryThumbs">
+              ${product.images && product.images.length ? product.images.map((img, i) => `
+                <img src="${img}" data-src="${img}" class="thumb ${i === 0 ? 'active' : ''}" alt="Thumb ${i+1}">
+              `).join('') : `<img src="${product.coverImage}" data-src="${product.coverImage}" class="thumb active" alt="Thumb">`}
+            </div>
+            <div class="gallery-main">
+              <img id="mainImage" src="${product.coverImage || product.images?.[0] || 'https://placehold.co/600x600/4361ee/fff?text=No+Image'}" alt="${product.title}">
+            </div>
+          </div>
+          
+          <div class="product-category">${product.category} ${product.subcategory ? `› ${product.subcategory}` : ''}</div>
+          <h1 class="product-title">${escapeHtml(product.title)}</h1>
+          <div class="product-price">GHS ${Number(product.price).toLocaleString('en-GH', { minimumFractionDigits: 2 })}</div>
+          
+          <div class="product-rating">
+            <div class="stars">${starsHtml}</div>
+            <span class="review-link">(${product.reviews_count || 0} avis)</span>
+          </div>
+          
+          <div class="product-description">${escapeHtml(product.description)}</div>
+          
+          <div class="product-seller">
+            <div class="seller-avatar">
+              ${product.seller?.avatar ? `<img src="${product.seller.avatar}" alt="${product.seller.name}">` : product.seller?.name?.charAt(0).toUpperCase() || 'S'}
+            </div>
+            <div>
+              <div class="seller-name">${product.seller?.name || 'Vendeur'}</div>
+              <div class="seller-university">${product.seller?.university || 'Université'}</div>
+            </div>
+          </div>
+          
+          <div class="product-meta">
+            <div class="meta-item">
+              <span class="meta-label">Condition</span>
+              <span class="meta-value">${product.condition === 'new' ? 'Neuf' : 'Occasion'}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Stock</span>
+              <span class="meta-value">${product.stock > 0 ? product.stock + ' unités' : 'Épuisé'}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">MOQ</span>
+              <span class="meta-value">${product.moq || 1} pièce(s)</span>
+            </div>
+          </div>
+          
+          <div class="product-actions">
+            ${!isOwnProduct && user ? `
+              <button class="btn-primary" id="contactSellerBtn">
+                <i class="fa-regular fa-comment"></i> Contacter le vendeur
+              </button>
+            ` : isOwnProduct ? `
+              <button class="btn-secondary" id="editProductBtn">✏️ Modifier</button>
+              <button class="btn-danger" id="deleteProductBtn">🗑️ Supprimer</button>
+            ` : `
+              <a href="/pages/auth/login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn-primary">
+                🔐 Se connecter pour contacter
+              </a>
+            `}
+          </div>
+        </div>
+        
+        <!-- TABS -->
+        <div class="product-tabs">
+          <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="description">Description</button>
+            <button class="tab-btn" data-tab="details">Détails</button>
+            <button class="tab-btn" data-tab="reviews">Avis (${product.reviews_count || 0})</button>
+          </div>
+          <div class="tab-content active" id="tab-description">
+            <p>${escapeHtml(product.description)}</p>
+          </div>
+          <div class="tab-content" id="tab-details">
+            <ul style="list-style: none; padding: 0;">
+              <li><strong>Catégorie :</strong> ${product.category}</li>
+              <li><strong>Sous-catégorie :</strong> ${product.subcategory || 'Non spécifié'}</li>
+              <li><strong>Référence :</strong> ${product.id}</li>
+              <li><strong>Date de mise en ligne :</strong> ${new Date(product.created_at).toLocaleDateString()}</li>
+            </ul>
+          </div>
+          <div class="tab-content" id="tab-reviews">
+            <p class="review-placeholder">Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>
+          </div>
+        </div>
+        
+        <!-- RELATED PRODUCTS -->
+        <div class="related-section" id="relatedProductsSection">
+          <h3 class="related-title">Produits similaires</h3>
+          <div class="related-grid" id="relatedGrid">
+            <div class="error-state">Chargement...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- SIDEBAR (Recommendations) -->
+      <div class="product-sidebar">
+        <h3 class="sidebar-title">✨ Vous pourriez aussi aimer</h3>
+        <div class="recommendation-grid" id="recommendationGrid">
+          <div class="error-state">Chargement...</div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('product-details').innerHTML = html;
+  
+  // Gallery thumbs
+  const thumbs = document.querySelectorAll('.thumb');
+  const mainImage = document.getElementById('mainImage');
+  thumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      thumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      mainImage.src = thumb.dataset.src;
+    });
+  });
+  
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabContents.forEach(c => c.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    });
+  });
+  
+  // Contact seller
+  const contactBtn = document.getElementById('contactSellerBtn');
+  if (contactBtn && user) {
+    contactBtn.addEventListener('click', () => {
+      if (window.ChatModule) {
+        ChatModule.openChatWithContext(product.seller.id, product.seller.name, {
+          type: 'product',
+          id: product.id,
+          title: product.title,
+          image: product.coverImage || product.images?.[0]
+        });
+      } else {
+        alert('Module de chat non disponible');
+      }
+    });
+  }
+  
+  // Edit / Delete
+  document.getElementById('editProductBtn')?.addEventListener('click', () => {
+    window.location.href = `/pages/sell.html?edit=${product.id}`;
+  });
+  document.getElementById('deleteProductBtn')?.addEventListener('click', async () => {
+    if (confirm('Supprimer ce produit ?')) {
+      const res = await Products.delete(product.id, user);
+      if (res.ok) {
+        alert('Produit supprimé');
+        window.location.href = '/index.html';
+      } else {
+        alert(res.error);
+      }
+    }
+  });
+  
+  // Charger les recommandations (sidebar)
+  loadRecommendations(product);
+  
+  // Charger les produits similaires (section)
+  loadRelatedProducts(product);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m));
+}
+
+async function loadRecommendations(product) {
+  const container = document.getElementById('recommendationGrid');
+  try {
+    const url = `https://avena-backend-os8d.onrender.com/api/products/paginated?page=1&limit=5&sort=views&order=DESC`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const products = (data.products || []).filter(p => p.id !== product.id).slice(0, 5);
+    
+    if (!products.length) {
+      container.innerHTML = '<div class="error-state">Aucune recommandation</div>';
+      return;
+    }
+    
+    container.innerHTML = products.map(p => `
+      <div class="rec-item" data-id="${p.id}">
+        <img class="rec-img" src="${p.cover_image || 'https://placehold.co/60x60/4361ee/fff?text=No+Img'}" onerror="this.src='https://placehold.co/60x60/4361ee/fff?text=No+Img'">
+        <div class="rec-info">
+          <div class="rec-title">${escapeHtml(p.title)}</div>
+          <div class="rec-price">GHS ${Number(p.price).toFixed(2)}</div>
+          <div class="rec-category">${p.category}</div>
+        </div>
+      </div>
+    `).join('');
+    
+    document.querySelectorAll('.rec-item').forEach(item => {
+      item.addEventListener('click', () => {
+        window.location.href = `/pages/product.html?id=${item.dataset.id}`;
+      });
+    });
+  } catch (error) {
+    container.innerHTML = '<div class="error-state">Erreur de chargement</div>';
+  }
+}
+
+async function loadRelatedProducts(product) {
+  const container = document.getElementById('relatedGrid');
+  try {
+    // Même catégorie, même sous-catégorie, ou aléatoire
+    const url = `https://avena-backend-os8d.onrender.com/api/products/paginated?page=1&limit=8&category=${product.category}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    let products = (data.products || []).filter(p => p.id !== product.id);
+    
+    // Priorité à la même sous-catégorie
+    const sameSubcat = products.filter(p => p.subcategory === product.subcategory);
+    const other = products.filter(p => p.subcategory !== product.subcategory);
+    products = [...sameSubcat, ...other].slice(0, 8);
+    
+    if (!products.length) {
+      container.innerHTML = '<div class="error-state">Aucun produit similaire</div>';
+      return;
+    }
+    
+    container.innerHTML = products.map(p => `
+      <div class="related-card" data-id="${p.id}">
+        <img src="${p.cover_image || 'https://placehold.co/200x200/4361ee/fff?text=No+Img'}" onerror="this.src='https://placehold.co/200x200/4361ee/fff?text=No+Img'">
+        <div class="related-card-body">
+          <div class="related-card-title">${escapeHtml(p.title)}</div>
+          <div class="related-card-price">GHS ${Number(p.price).toFixed(2)}</div>
+        </div>
+      </div>
+    `).join('');
+    
+    document.querySelectorAll('.related-card').forEach(card => {
+      card.addEventListener('click', () => {
+        window.location.href = `/pages/product.html?id=${card.dataset.id}`;
+      });
+    });
+  } catch (error) {
+    container.innerHTML = '<div class="error-state">Erreur de chargement</div>';
+  }
+}
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+  renderProductPage();
+});
+</script>
+
 </body>
 </html>

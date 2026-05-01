@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AVENA — Product Module
  * assets/js/modules/product.js
  * 
@@ -31,7 +31,7 @@ const ProductsDB = {
   
   async getById(id) {
   try {
-    const response = await fetch(`https://avena-backend-os8d.onrender.com/api/products/${id}`);
+    const response = await fetch(`${window.APP_CONFIG.API_URL}/api/products/${id}`);
     if (!response.ok) throw new Error('Product not found');
     const data = await response.json();
     return data.product;
