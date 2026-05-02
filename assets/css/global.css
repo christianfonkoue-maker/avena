@@ -48,6 +48,22 @@ p,i{
     justify-content: space-between;
     gap: 10%;
 }
+/* Header animation au scroll */
+.header-hidden {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+/* Compenser le header fixe */
+body {
+  padding-top: 100px;
+}
+
+/* Ajustement responsive */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+}
 
 /* ==================main1========== */
 .main1logo{

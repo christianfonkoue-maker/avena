@@ -9,6 +9,9 @@ Built with vanilla HTML/CSS/JS on the frontend and Express + PostgreSQL on the b
 
 - **Frontend (Vercel)**: [https://avena-frontend.vercel.app](https://avena-frontend.vercel.app)
 - **Backend API (Render)**: [https://avena-backend.onrender.com](https://avena-backend.onrender.com)
+-  **login test user**:   test.user@acity.edu.gh
+-  **login password**:    Rdtx@39088
+    
 
 ---
 
@@ -253,11 +256,3 @@ For questions or contributions, reach out via Christian.fonkoue@acity.edu.gh
 text
 
 ---
-
-## ✅ Next steps
-
-1. Copy this content into your `README.md`
-2. Adjust the **Live Demo URLs** after deployment
-3. Push to GitHub
-
-

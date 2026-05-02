@@ -8,8 +8,6 @@
 class AvennaHeader extends HTMLElement {
   constructor() {
     super();
-    // PAS de attachShadow() → Light DOM
-    // Sans Shadow DOM, document.querySelector('#categoryTrigger') fonctionne
   }
 
   async connectedCallback() {
@@ -17,11 +15,11 @@ class AvennaHeader extends HTMLElement {
       const response = await fetch('/components/header.html');
       const html = await response.text();
 
-      // Injection dans le Light DOM
       this.innerHTML = html;
 
       this._updateAuthUI();
       this._initMegaMenu();
+      this._initScrollBehavior();
     } catch (error) {
       console.error('Error loading header:', error);
       this.innerHTML = '<div style="color:red">Header failed to load</div>';
@@ -29,13 +27,11 @@ class AvennaHeader extends HTMLElement {
   }
 
   _updateAuthUI() {
-    // ✅ FIX 1 : lire dans localStorage (c'est là que auth.js → Session.set() sauvegarde)
     let user = null;
     try {
       const raw = localStorage.getItem('avena_session');
       if (raw) {
         const parsed = JSON.parse(raw);
-        // Vérifier que la session n'est pas expirée
         if (parsed && Date.now() < parsed.expiresAt) {
           user = parsed;
         } else {
@@ -51,7 +47,6 @@ class AvennaHeader extends HTMLElement {
     const userAvatar = this.querySelector('#userAvatar');
 
     if (user) {
-      // ✅ FIX 2 : supporter first_name (backend) ET firstName (ancien format)
       const firstName = user.first_name || user.firstName || '';
       const initial   = firstName.charAt(0).toUpperCase() || 'U';
 
@@ -63,7 +58,6 @@ class AvennaHeader extends HTMLElement {
       if (userMenu)   userMenu.style.display   = 'none';
     }
 
-    // Déconnexion
     const logoutBtn = this.querySelector('#logoutBtn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', (e) => {
@@ -75,16 +69,19 @@ class AvennaHeader extends HTMLElement {
       });
     }
 
-    // Toggle dropdown utilisateur
     const toggle   = this.querySelector('#userDropdownToggle');
     const dropdown = this.querySelector('#userDropdown');
+    const userMenuDiv = this.querySelector('.user-menu');
+    
     if (toggle && dropdown) {
-      toggle.addEventListener('click', () => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         dropdown.classList.toggle('open');
       });
-      // Fermer si clic ailleurs
       document.addEventListener('click', (e) => {
-        if (!toggle.contains(e.target)) dropdown.classList.remove('open');
+        if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+        }
       });
     }
   }
@@ -94,6 +91,56 @@ class AvennaHeader extends HTMLElement {
       window._megaMenuInitialized = true;
       window.megaMenu = new window.MegaMenu();
     }
+  }
+
+  _initScrollBehavior() {
+    setTimeout(() => {
+      const headerElement = this.querySelector('header');
+      if (!headerElement) {
+        console.warn('Header not found for scroll behavior');
+        return;
+      }
+
+      let lastScrollY = window.scrollY;
+
+      // Injecter le style CSS
+      if (!document.getElementById('scroll-header-style')) {
+        const style = document.createElement('style');
+        style.id = 'scroll-header-style';
+        style.textContent = `
+          avenna-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: transform 0.3s ease-in-out;
+          }
+          avenna-header.header-hidden {
+            transform: translateY(-100%);
+          }
+          avenna-header header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          // Scroll vers le bas → cache
+          this.classList.add('header-hidden');
+        } else if (currentScrollY < lastScrollY) {
+          // Scroll vers le haut → montre
+          this.classList.remove('header-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+      });
+    }, 100);
   }
 }
 

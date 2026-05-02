@@ -1,89 +1,97 @@
 /**
- * ============================================================
- *  AVENA — Messaging Module
- *  assets/js/modules/messaging.js
- *
- *  Features: inbox, send, conversations, unread count
- *  MOCK: localStorage  |  PROD: POST/GET /api/messages + WebSocket
- * ============================================================
+ * AVENA — Messaging Module (API + WebSocket)
+ * assets/js/modules/messaging.js
  */
+
 'use strict';
 
-const MessagingDB = {
-  KEY: 'avena_messages',
-  getAll()   { try{return JSON.parse(localStorage.getItem(this.KEY)??'[]');}catch{return[];} },
-  save(msgs) { localStorage.setItem(this.KEY,JSON.stringify(msgs)); },
+const API_BASE = window.APP_CONFIG?.API_URL || 'https://avena-backend-os8d.onrender.com';
 
-  getConversations(userId) {
-    const msgs = this.getAll();
-    const map  = {};
-    msgs.forEach(m => {
-      const otherId = m.from===userId ? m.to : m.to===userId ? m.from : null;
-      if (!otherId) return;
-      if (!map[otherId] || new Date(m.sentAt)>new Date(map[otherId].lastMsg.sentAt))
-        map[otherId] = { otherId, otherName:m.from===userId?m.toName:m.fromName, lastMsg:m, unread:0 };
-      if (m.to===userId && !m.read) map[otherId].unread++;
-    });
-    return Object.values(map).sort((a,b)=>new Date(b.lastMsg.sentAt)-new Date(a.lastMsg.sentAt));
+const MessagingAPI = {
+  // Récupérer toutes les conversations de l'utilisateur
+  async getConversations() {
+    const token = localStorage.getItem('avena_token');
+    if (!token) return [];
+
+    try {
+      const res = await fetch(`${API_BASE}/api/messages/conversations`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.conversations || [];
+    } catch {
+      return [];
+    }
   },
 
-  getThread(userId, otherId) {
-    return this.getAll()
-      .filter(m=>(m.from===userId&&m.to===otherId)||(m.from===otherId&&m.to===userId))
-      .sort((a,b)=>new Date(a.sentAt)-new Date(b.sentAt));
+  // Récupérer les messages d'une conversation
+  async getConversation(otherUserId) {
+    const token = localStorage.getItem('avena_token');
+    if (!token) return [];
+
+    try {
+      const res = await fetch(`${API_BASE}/api/messages/conversation/${otherUserId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.messages || [];
+    } catch {
+      return [];
+    }
   },
 
-  markRead(userId, otherId) {
-    const msgs = this.getAll().map(m=>{
-      if(m.to===userId&&m.from===otherId) m.read=true;
-      return m;
-    });
-    this.save(msgs);
+  // Envoyer un message (via API uniquement, WebSocket sera en plus)
+  async sendMessage(to, body, subject = '') {
+    const token = localStorage.getItem('avena_token');
+    if (!token) return { ok: false };
+
+    try {
+      const res = await fetch(`${API_BASE}/api/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ to, body, subject })
+      });
+      if (!res.ok) return { ok: false };
+      return await res.json();
+    } catch {
+      return { ok: false };
+    }
   },
 
-  totalUnread(userId) {
-    return this.getAll().filter(m=>m.to===userId&&!m.read).length;
+  // Marquer une conversation comme lue
+  async markAsRead(otherUserId) {
+    const token = localStorage.getItem('avena_token');
+    if (!token) return;
+
+    try {
+      await fetch(`${API_BASE}/api/messages/conversation/${otherUserId}/read`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch {}
   },
+
+  // Nombre de messages non lus
+  async getUnreadCount() {
+    const token = localStorage.getItem('avena_token');
+    if (!token) return 0;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/messages/unread-count`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) return 0;
+      const data = await res.json();
+      return data.count || 0;
+    } catch {
+      return 0;
+    }
+  }
 };
 
-class Messaging {
-  static async send({ from, fromName, to, toName, subject, body }) {
-    if (!from||!to||!body?.trim()) return { ok:false, error:'Message body is required.' };
-    const msg = {
-      id:`msg_${Date.now()}`, from, fromName, to, toName,
-      subject:subject||'(no subject)', body:body.trim(),
-      read:false, sentAt:new Date().toISOString(),
-    };
-    const msgs = MessagingDB.getAll();
-    msgs.push(msg);
-    MessagingDB.save(msgs);
-    /* PRODUCTION: POST /api/messages + emit via socket.io */
-    return { ok:true, message:'Message sent.', msg };
-  }
-
-  static getConversations(userId) { return MessagingDB.getConversations(userId); }
-  static getThread(userId,otherId) { return MessagingDB.getThread(userId,otherId); }
-  static markRead(userId,otherId)  { MessagingDB.markRead(userId,otherId); }
-  static totalUnread(userId)       { return MessagingDB.totalUnread(userId); }
-
-  static formatTime(iso) {
-    const d=new Date(iso), now=new Date();
-    if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString('en-GH',{hour:'2-digit',minute:'2-digit'});
-    return d.toLocaleDateString('en-GH',{month:'short',day:'numeric'});
-  }
-
-  /* Seed a system message (e.g. from paid event registration) */
-  static seedEventChat({ fromUser, toUser, eventTitle }) {
-    Messaging.send({
-      from:     toUser.id,
-      fromName: toUser.name,
-      to:       fromUser.id,
-      toName:   `${fromUser.firstName} ${fromUser.lastName}`,
-      subject:  `Re: ${eventTitle}`,
-      body:     `Hi ${fromUser.firstName}! Thanks for your interest in "${eventTitle}". Please reply with your payment details or any questions.`,
-    });
-  }
-}
-
-window.Messaging   = Messaging;
-window.MessagingDB = MessagingDB;
+window.MessagingAPI = MessagingAPI;
