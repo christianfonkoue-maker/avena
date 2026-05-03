@@ -29,17 +29,17 @@ class AvennaHeader extends HTMLElement {
   _updateAuthUI() {
     let user = null;
     try {
-      const raw = localStorage.getItem('avena_session');
+      const raw = sessionStorage.getItem('avena_session');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && Date.now() < parsed.expiresAt) {
           user = parsed;
         } else {
-          localStorage.removeItem('avena_session');
+          sessionStorage.removeItem('avena_session');
         }
       }
     } catch (e) {
-      localStorage.removeItem('avena_session');
+      sessionStorage.removeItem('avena_session');
     }
 
     const authButton = this.querySelector('#authButton');
@@ -62,8 +62,7 @@ class AvennaHeader extends HTMLElement {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        localStorage.removeItem('avena_session');
-        localStorage.removeItem('avena_token');
+        sessionStorage.removeItem('avena_session');
         sessionStorage.removeItem('avena_token');
         window.location.href = '/index.html';
       });
@@ -71,7 +70,6 @@ class AvennaHeader extends HTMLElement {
 
     const toggle   = this.querySelector('#userDropdownToggle');
     const dropdown = this.querySelector('#userDropdown');
-    const userMenuDiv = this.querySelector('.user-menu');
     
     if (toggle && dropdown) {
       toggle.addEventListener('click', (e) => {
@@ -103,7 +101,6 @@ class AvennaHeader extends HTMLElement {
 
       let lastScrollY = window.scrollY;
 
-      // Injecter le style CSS
       if (!document.getElementById('scroll-header-style')) {
         const style = document.createElement('style');
         style.id = 'scroll-header-style';
@@ -131,10 +128,8 @@ class AvennaHeader extends HTMLElement {
         const currentScrollY = window.scrollY;
 
         if (currentScrollY > lastScrollY && currentScrollY > 80) {
-          // Scroll vers le bas → cache
           this.classList.add('header-hidden');
         } else if (currentScrollY < lastScrollY) {
-          // Scroll vers le haut → montre
           this.classList.remove('header-hidden');
         }
 

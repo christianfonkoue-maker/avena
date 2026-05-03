@@ -11,24 +11,24 @@ const getApiUrl = () => {
   return window.APP_CONFIG?.API_URL || 'https://avena-backend-os8d.onrender.com';
 };
 
-/* ── Session ── */
+/* ── Session (stockée en sessionStorage pour isolation par onglet) ── */
 const Session = {
   KEY: 'avena_session',
   set(u) {
-    localStorage.setItem(this.KEY, JSON.stringify({
+    sessionStorage.setItem(this.KEY, JSON.stringify({
       ...u, password: undefined,
       expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
     }));
   },
   get() {
     try {
-      const s = JSON.parse(localStorage.getItem(this.KEY));
+      const s = JSON.parse(sessionStorage.getItem(this.KEY));
       if (!s) return null;
       if (Date.now() > s.expiresAt) { this.clear(); return null; }
       return s;
     } catch { return null; }
   },
-  clear() { localStorage.removeItem(this.KEY); },
+  clear() { sessionStorage.removeItem(this.KEY); },
   isLoggedIn() { return !!this.get(); },
 };
 
@@ -101,7 +101,6 @@ class Auth {
       }
       
       if (data.token) {
-        localStorage.setItem('avena_token', data.token);
         sessionStorage.setItem('avena_token', data.token);
         console.log('✅ Token stocké :', data.token.substring(0, 50) + '...');
       } else {
@@ -174,7 +173,6 @@ class Auth {
 
   /* LOGOUT */
   static logout() {
-    localStorage.removeItem('avena_token');
     sessionStorage.removeItem('avena_token');
     Session.clear();
     window.location.href = '/pages/auth/login.html';

@@ -8,8 +8,6 @@
 const ChatManager = (function() {
   let socket = null;
   let currentUser = null;
-  let currentOtherUserId = null;
-  let currentOtherUserName = '';
   let onMessageCallback = null;
 
   // Connexion WebSocket
@@ -30,41 +28,49 @@ const ChatManager = (function() {
       if (onMessageCallback) {
         onMessageCallback(message);
       }
-      // Mettre à jour les conversations si nécessaire
       window.dispatchEvent(new CustomEvent('message-received', { detail: message }));
     });
 
     socket.on('disconnect', () => console.log('🔌 WebSocket disconnected'));
   }
 
-  // Envoyer un message en temps réel
- // Envoyer un message et l'ajouter instantanément à l'interface
-async function sendMessageAndUpdateUI(otherUserId, body, containerId) {
-  const user = Session.get();
-  if (!user) return false;
-
-  // Ajouter le message dans l'UI tout de suite (optimiste)
-  appendMessage(containerId, {
-    body: body,
-    senderId: user.id,
-    createdAt: new Date().toISOString()
-  }, 'mine');
-
-  // Envoyer via WebSocket
-  if (socket && socket.connected) {
-    socket.emit('message:send', {
-      to: otherUserId,
-      body: body,
-      subject: '',
-      senderName: `${user.first_name} ${user.last_name}`
-    });
+  // Envoyer un message via WebSocket (simple)
+  function sendMessage(to, body, subject = '') {
+    if (!socket || !socket.connected) {
+      console.warn('Socket not connected');
+      return false;
+    }
+    socket.emit('message:send', { to, body, subject });
     return true;
   }
 
-  // Fallback via API
-  const result = await MessagingAPI.sendMessage(otherUserId, body);
-  return result.ok;
-}
+  // Envoyer un message avec mise à jour instantanée de l'interface
+  async function sendMessageAndUpdateUI(otherUserId, body, containerId) {
+    const user = Session.get();
+    if (!user) return false;
+
+    // Ajouter le message dans l'UI tout de suite (optimiste)
+    appendMessage(containerId, {
+      body: body,
+      senderId: user.id,
+      createdAt: new Date().toISOString()
+    }, 'mine');
+
+    // Envoyer via WebSocket
+    if (socket && socket.connected) {
+      socket.emit('message:send', {
+        to: otherUserId,
+        body: body,
+        subject: '',
+        senderName: `${user.first_name} ${user.last_name}`
+      });
+      return true;
+    }
+
+    // Fallback via API
+    const result = await MessagingAPI.sendMessage(otherUserId, body);
+    return result.ok;
+  }
 
   // Définir le callback pour les nouveaux messages
   function onNewMessage(callback) {
@@ -73,9 +79,6 @@ async function sendMessageAndUpdateUI(otherUserId, body, containerId) {
 
   // Ouvrir une conversation
   async function openConversation(otherUserId, otherUserName, containerId, onMessageSent = null) {
-    currentOtherUserId = otherUserId;
-    currentOtherUserName = otherUserName;
-
     // Marquer comme lu
     await MessagingAPI.markAsRead(otherUserId);
 
@@ -91,14 +94,13 @@ async function sendMessageAndUpdateUI(otherUserId, body, containerId) {
     });
 
     if (onMessageSent) {
-      // Lier l'envoi
       const sendBtn = document.querySelector('#sendMessageBtn');
       const input = document.querySelector('#messageInput');
       if (sendBtn && input) {
         const handler = () => {
           const body = input.value.trim();
           if (!body) return;
-          sendMessage(otherUserId, body, '');
+          sendMessageAndUpdateUI(otherUserId, body, containerId);
           input.value = '';
           if (onMessageSent) onMessageSent(body);
         };
@@ -156,9 +158,9 @@ async function sendMessageAndUpdateUI(otherUserId, body, containerId) {
   return {
     connect,
     sendMessage,
+    sendMessageAndUpdateUI,
     openConversation,
-    onNewMessage,
-    getAPI: () => MessagingAPI
+    onNewMessage
   };
 })();
 

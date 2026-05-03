@@ -8,9 +8,8 @@
 const API_BASE = window.APP_CONFIG?.API_URL || 'https://avena-backend-os8d.onrender.com';
 
 const MessagingAPI = {
-  // Récupérer toutes les conversations de l'utilisateur
   async getConversations() {
-    const token = localStorage.getItem('avena_token');
+    const token = sessionStorage.getItem('avena_token');
     if (!token) return [];
 
     try {
@@ -25,9 +24,8 @@ const MessagingAPI = {
     }
   },
 
-  // Récupérer les messages d'une conversation
   async getConversation(otherUserId) {
-    const token = localStorage.getItem('avena_token');
+    const token = sessionStorage.getItem('avena_token');
     if (!token) return [];
 
     try {
@@ -42,9 +40,8 @@ const MessagingAPI = {
     }
   },
 
-  // Envoyer un message (via API uniquement, WebSocket sera en plus)
   async sendMessage(to, body, subject = '') {
-    const token = localStorage.getItem('avena_token');
+    const token = sessionStorage.getItem('avena_token');
     if (!token) return { ok: false };
 
     try {
@@ -63,9 +60,8 @@ const MessagingAPI = {
     }
   },
 
-  // Marquer une conversation comme lue
   async markAsRead(otherUserId) {
-    const token = localStorage.getItem('avena_token');
+    const token = sessionStorage.getItem('avena_token');
     if (!token) return;
 
     try {
@@ -76,9 +72,8 @@ const MessagingAPI = {
     } catch {}
   },
 
-  // Nombre de messages non lus
   async getUnreadCount() {
-    const token = localStorage.getItem('avena_token');
+    const token = sessionStorage.getItem('avena_token');
     if (!token) return 0;
 
     try {

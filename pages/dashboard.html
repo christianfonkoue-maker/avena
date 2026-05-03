@@ -584,7 +584,7 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
   if (!file) return;
   const formData = new FormData();
   formData.append('avatar', file);
-  const token = localStorage.getItem('avena_token');
+  const token = sessionStorage.getItem('avena_token');   // au lieu de localStorage
   
   const res = await fetch('https://avena-backend-os8d.onrender.com/api/users/avatar', {
     method: 'POST',

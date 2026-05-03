@@ -9,14 +9,7 @@
   <style>
     * { box-sizing: border-box; }
     body { background: #f0f2f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; font-family: 'DM Sans', sans-serif; }
-    .compose-card {
-      background: white;
-      max-width: 550px;
-      width: 100%;
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
-    }
+    .compose-card { background: white; max-width: 550px; width: 100%; border-radius: 24px; padding: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
     .compose-card h1 { font-size: 1.4rem; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
     .form-group { margin-bottom: 20px; position: relative; }
     label { display: block; font-weight: 600; margin-bottom: 8px; color: #1a1d2e; }
@@ -24,41 +17,10 @@
     input:focus, textarea:focus { border-color: #4361ee; box-shadow: 0 0 0 3px rgba(67,97,238,0.1); }
     button { background: #075e54; color: white; border: none; padding: 12px; border-radius: 40px; width: 100%; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
     button:hover { background: #054a41; }
-    .suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid #e2e6f3;
-      border-top: none;
-      border-radius: 0 0 14px 14px;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 100;
-      display: none;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
-    .suggestion-item {
-      padding: 12px 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #f0f2f5;
-    }
+    .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e6f3; border-top: none; border-radius: 0 0 14px 14px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+    .suggestion-item { padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f2f5; }
     .suggestion-item:hover { background: #f0f2f5; }
-    .suggestion-avatar {
-      width: 36px;
-      height: 36px;
-      background: #4361ee;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-    }
+    .suggestion-avatar { width: 36px; height: 36px; background: #4361ee; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
     .suggestion-info { flex: 1; }
     .suggestion-name { font-weight: 600; margin-bottom: 2px; }
     .suggestion-email { font-size: 0.7rem; color: #7a7f9a; }
@@ -96,14 +58,11 @@
 <script src="../../assets/js/modules/messaging.js"></script>
 <script>
   const user = Session.get();
-  if (!user) {
-    location.href = '/pages/auth/login.html';
-  }
+  if (!user) { location.href = '/pages/auth/login.html'; }
 
   const API_URL = window.APP_CONFIG?.API_URL || 'https://avena-backend-os8d.onrender.com';
-  const token = localStorage.getItem('avena_token');
+  const token = sessionStorage.getItem('avena_token');
 
-  // Éléments DOM
   const recipientInput = document.getElementById('recipientInput');
   const suggestionsDiv = document.getElementById('suggestions');
   const recipientIdHidden = document.getElementById('recipientId');
@@ -113,46 +72,26 @@
   const loader = document.getElementById('loader');
   const resultMsg = document.getElementById('resultMsg');
 
-  // Compteur de caractères
-  messageBody.addEventListener('input', () => {
-    charCountSpan.textContent = messageBody.value.length;
-  });
+  messageBody.addEventListener('input', () => { charCountSpan.textContent = messageBody.value.length; });
 
-  // Recherche de destinataires
   let searchTimeout;
   recipientInput.addEventListener('input', async () => {
     const query = recipientInput.value.trim();
-    if (query.length < 2) {
-      suggestionsDiv.style.display = 'none';
-      recipientIdHidden.value = '';
-      return;
-    }
-
+    if (query.length < 2) { suggestionsDiv.style.display = 'none'; recipientIdHidden.value = ''; return; }
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(async () => {
       try {
-        const res = await fetch(`${API_URL}/api/users/search?q=${encodeURIComponent(query)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_URL}/api/users/search?q=${encodeURIComponent(query)}`, { headers: { 'Authorization': `Bearer ${token}` } });
         const data = await res.json();
         const users = data.users || [];
-
-        if (!users.length) {
-          suggestionsDiv.style.display = 'none';
-          return;
-        }
-
+        if (!users.length) { suggestionsDiv.style.display = 'none'; return; }
         suggestionsDiv.innerHTML = users.map(u => `
           <div class="suggestion-item" data-id="${u.id}" data-name="${u.first_name} ${u.last_name}" data-email="${u.email}">
             <div class="suggestion-avatar">${(u.first_name?.charAt(0) || 'U')}</div>
-            <div class="suggestion-info">
-              <div class="suggestion-name">${escapeHtml(u.first_name)} ${escapeHtml(u.last_name)}</div>
-              <div class="suggestion-email">${escapeHtml(u.email)}</div>
-            </div>
+            <div class="suggestion-info"><div class="suggestion-name">${escapeHtml(u.first_name)} ${escapeHtml(u.last_name)}</div><div class="suggestion-email">${escapeHtml(u.email)}</div></div>
           </div>
         `).join('');
         suggestionsDiv.style.display = 'block';
-
         document.querySelectorAll('.suggestion-item').forEach(item => {
           item.addEventListener('click', () => {
             recipientInput.value = item.dataset.name;
@@ -160,63 +99,35 @@
             suggestionsDiv.style.display = 'none';
           });
         });
-      } catch (err) {
-        console.error('Search error:', err);
-      }
+      } catch (err) { console.error('Search error:', err); }
     }, 300);
   });
+  document.addEventListener('click', (e) => { if (!recipientInput.contains(e.target)) suggestionsDiv.style.display = 'none'; });
 
-  // Clic ailleurs ferme les suggestions
-  document.addEventListener('click', (e) => {
-    if (!recipientInput.contains(e.target)) {
-      suggestionsDiv.style.display = 'none';
-    }
-  });
-
-  // Envoi du message
   document.getElementById('composeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const toId = recipientIdHidden.value;
     const body = messageBody.value.trim();
-
     resultMsg.innerHTML = '';
     resultMsg.className = 'result-msg';
-
-    if (!toId) {
-      resultMsg.textContent = 'Veuillez sélectionner un destinataire valide.';
-      resultMsg.classList.add('error');
-      return;
-    }
-    if (!body) {
-      resultMsg.textContent = 'Veuillez écrire un message.';
-      resultMsg.classList.add('error');
-      return;
-    }
-
+    if (!toId) { resultMsg.textContent = 'Veuillez sélectionner un destinataire valide.'; resultMsg.classList.add('error'); return; }
+    if (!body) { resultMsg.textContent = 'Veuillez écrire un message.'; resultMsg.classList.add('error'); return; }
     sendBtn.disabled = true;
     loader.style.display = 'block';
-
     const result = await MessagingAPI.sendMessage(toId, body);
-    
     loader.style.display = 'none';
     sendBtn.disabled = false;
-
     if (result.ok) {
       resultMsg.textContent = '✅ Message envoyé ! Redirection...';
       resultMsg.classList.add('success');
-      setTimeout(() => {
-        location.href = 'inbox.html';
-      }, 1200);
+      setTimeout(() => { location.href = 'inbox.html'; }, 1200);
     } else {
       resultMsg.textContent = '❌ Erreur : destinataire introuvable ou problème réseau.';
       resultMsg.classList.add('error');
     }
   });
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m));
-  }
+  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m)); }
 </script>
 </body>
 </html>
