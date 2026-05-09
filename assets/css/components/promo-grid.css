@@ -1,0 +1,339 @@
+/**
+ * AVENA — Promo Grid Component Styles (version compacte)
+ * assets/css/components/promo-grid.css
+ */
+
+/* Container principal - plus compact */
+.avenna-promo-grid {
+    max-width: 1400px;
+    margin: 10px auto;
+    padding: 0px 20px;
+    margin-bottom: 50px;
+    margin-top: 40px;
+}
+
+/* Première partie : grille 7 frames - plus compacte */
+.promo-grid-main {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 12px;
+  margin-bottom: 30px;
+  height: 300px;
+}
+
+/* Colonnes gauche et droite */
+.promo-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 300px;
+}
+
+/* Frame latéral - plus petit */
+.promo-side-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 3 / 4;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #f5f5f5;
+}
+
+.promo-side-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.promo-side-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.promo-side-card:hover img {
+  transform: scale(1.03);
+}
+
+.promo-side-card .overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  color: white;
+}
+
+.promo-side-card .tag {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.promo-side-card .title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+.promo-side-card .price {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffd700;
+}
+
+/* Frame central animé - plus compact */
+.promo-center-card {
+  border-radius: 12px;
+  overflow: hidden;
+  /*aspect-ratio: 3 / 4;*/
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
+.promo-center-card .carousel-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.promo-center-card .carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.promo-center-card .carousel-slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.promo-center-card .carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promo-center-card .carousel-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  z-index: 2;
+}
+
+.promo-center-card .carousel-tag {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.promo-center-card .carousel-title {
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 5px 0;
+}
+
+.promo-center-card .carousel-price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.promo-center-card .carousel-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 5px 16px;
+  background: white;
+  color: #1a1d2e;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  transition: all 0.3s;
+}
+
+.promo-center-card .carousel-btn:hover {
+  background: #4361ee;
+  color: white;
+  transform: translateX(3px);
+}
+
+/* Dots indicateurs - plus petits */
+.carousel-dots {
+  position: relative;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 3;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.carousel-dot.active {
+  background: white;
+  width: 18px;
+  border-radius: 10px;
+}
+
+/* Deuxième partie : cercles promotionnels - plus compacts */
+.promo-circles {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.promo-circles-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-primary, #1a1d2e);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.promo-circles-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.promo-circle-card {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 80px;
+}
+
+.promo-circle-card:hover {
+  transform: translateY(-3px);
+}
+
+.promo-circle-card .circle {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s;
+}
+
+.promo-circle-card:hover .circle {
+  box-shadow: 0 8px 20px rgba(67,97,238,0.3);
+}
+
+.promo-circle-card .circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.promo-circle-card:hover .circle img {
+  transform: scale(1.1);
+}
+
+.promo-circle-card .circle-title {
+  font-weight: 500;
+  font-size: 0.7rem;
+  color: var(--text-primary, #1a1d2e);
+}
+
+.promo-circle-card .circle-subtitle {
+  font-size: 0.6rem;
+  color: var(--text-muted, #9499b5);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .promo-grid-main {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .promo-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    height: 400px;
+  }
+  
+  .promo-side-card {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .promo-center-card {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .promo-circles-grid {
+    gap: 15px;
+  }
+  
+  .promo-circle-card {
+    width: 70px;
+  }
+  
+  .promo-circle-card .circle {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .promo-circle-card .circle-title {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .promo-col {
+    grid-template-columns: 1fr;
+  }
+  
+  .promo-side-card {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .promo-center-card .carousel-title {
+    font-size: 0.9rem;
+  }
+  
+  .promo-center-card .carousel-content {
+    padding: 10px;
+  }
+  
+  .promo-circles-grid {
+    gap: 12px;
+  }
+  
+  .promo-circle-card {
+    width: 60px;
+  }
+  
+  .promo-circle-card .circle {
+    width: 50px;
+    height: 50px;
+  }
+}

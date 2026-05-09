@@ -58,6 +58,7 @@ body {
   padding-top: 100px;
 }
 
+
 /* Ajustement responsive */
 @media (max-width: 768px) {
   body {
@@ -861,7 +862,7 @@ footer{
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: #4361ee;
+            background: #ff3333;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -883,7 +884,8 @@ footer{
         .dropdown-toggle:hover {
             background: #eef0fd;
         }
- 
+ /* Import des composants */
+@import url('./components/promo-grid.css');
 /* ============================================================
    RESPONSIVE
    ============================================================ */

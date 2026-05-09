@@ -7,7 +7,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <style>
-    /* Variables */
+    body{background:#f4f6fb;}
+    .create-wrap{width:50%;margin:0 auto;padding:32px 24px}
+    .auth-card{max-width:100%;margin-top:0}
+    .section-sep{font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#9499b5;padding:4px 0;border-bottom:1px solid #e2e6f3;margin-bottom:4px}
+    .page-bar{background:#fff;border-bottom:1px solid #e2e6f3;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;z-index:10;width:100%}
+    .page-bar__brand{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#4361ee}
+    .image-preview { margin-top: 12px; max-width: 200px; border-radius: 8px; overflow: hidden; }
+    .image-preview img { width: 100%; height: auto; display: none; }
+    .image-preview img.show { display: block; }
+    .image-placeholder { color: #7a7f9a; font-size: 0.8rem; margin-top: 8px; }
     :root {
       --success: #38a169;
       --warning: #ecc94b;
@@ -26,7 +35,6 @@
       padding: 0 20px;
     }
 
-    /* Stepper */
     .stepper {
       display: flex;
       justify-content: space-between;
@@ -82,7 +90,6 @@
       color: var(--primary);
     }
 
-    /* Form Steps */
     .form-step {
       display: none;
       background: white;
@@ -109,7 +116,6 @@
       margin-bottom: 24px;
     }
 
-    /* Form Elements */
     .form-group {
       margin-bottom: 20px;
     }
@@ -145,11 +151,19 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
+    .error-message {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-message.show {
+      display: block;
+    }
     @media (max-width: 560px) {
       .form-row { grid-template-columns: 1fr; }
     }
 
-    /* Image Upload */
     .image-upload-area {
       border: 2px dashed var(--gray-border);
       border-radius: 12px;
@@ -195,7 +209,6 @@
       font-size: 0.7rem;
     }
 
-    /* Buttons */
     .btn-nav {
       margin-top: 32px;
       display: flex;
@@ -225,7 +238,6 @@
       background: var(--gray-border);
     }
 
-    /* Condition Toggle */
     .condition-toggle {
       display: flex;
       gap: 12px;
@@ -245,23 +257,33 @@
       color: white;
     }
 
-    /* Alert */
     .alert {
       padding: 12px 16px;
       border-radius: 10px;
       margin-bottom: 20px;
       display: none;
     }
-    .alert.show { display: block; }
+    .alert.show {
+      display: block;
+    }
     .alert-error { background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7; }
     .alert-success { background: #f0fff4; color: var(--success); border: 1px solid #c6f6d5; }
+
+    .char-counter {
+      text-align: right;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
-
+<nav class="page-bar">
+  <span class="page-bar__brand">Avena — sell with us </span>
+  <a href="/index.html" style="font-size:.85rem;color:#4361ee;font-weight:600;font-family:'Sora',sans-serif">← home page</a>
+</nav>
 <div class="sell-container">
   
-  <!-- Stepper -->
   <div class="stepper">
     <div class="step active" data-step="1">
       <div class="step-number">1</div>
@@ -273,7 +295,7 @@
     </div>
     <div class="step" data-step="3">
       <div class="step-number">3</div>
-      <div class="step-label">Pricing & Stock</div>
+      <div class="step-label">Pricing</div>
     </div>
     <div class="step" data-step="4">
       <div class="step-number">4</div>
@@ -285,30 +307,32 @@
     </div>
   </div>
 
-  <!-- Alertes -->
   <div id="alertError" class="alert alert-error"></div>
   <div id="alertSuccess" class="alert alert-success"></div>
 
-  <!-- Étape 1 : Basic Info -->
+  <!-- Step 1 -->
   <div class="form-step active-step" id="step1">
     <h2 class="step-title">Tell us about your item</h2>
-    <p class="step-desc">Provide a clear title and detailed description to attract buyers.</p>
+    <p class="step-desc">Provide a clear title and detailed description.</p>
     
     <div class="form-group">
       <label class="form-label">Product Title <span class="required">*</span></label>
-      <input type="text" id="title" class="form-input" placeholder="e.g., HP Laptop Core i5 8GB RAM" maxlength="100">
+      <input type="text" id="title" class="form-input" placeholder="e.g., HP Laptop Core i5" maxlength="100">
+      <div class="char-counter" id="titleCounter">0/100</div>
+      <div class="error-message" id="titleError">Title must be at least 5 characters</div>
     </div>
     
     <div class="form-group">
       <label class="form-label">Description <span class="required">*</span></label>
-      <textarea id="description" class="form-textarea" placeholder="Describe the product condition, features, reason for selling..."></textarea>
-      <small class="character-count" style="display:block;margin-top:4px;color:var(--text-muted)">Min. 20 characters</small>
+      <textarea id="description" class="form-textarea" placeholder="Describe your product..." maxlength="2000"></textarea>
+      <div class="char-counter" id="descCounter">0/2000</div>
+      <div class="error-message" id="descError">Description must be at least 20 characters</div>
     </div>
     
     <div class="form-group">
       <label class="form-label">Condition <span class="required">*</span></label>
       <div class="condition-toggle" id="conditionToggle">
-        <div class="condition-option" data-condition="new">🆕 Brand New</div>
+        <div class="condition-option selected" data-condition="new">🆕 Brand New</div>
         <div class="condition-option" data-condition="used">🔄 Used - Good</div>
       </div>
     </div>
@@ -319,30 +343,40 @@
     </div>
   </div>
 
-  <!-- Étape 2 : Catégorie -->
+  <!-- Step 2 : Category (3 levels - English) -->
   <div class="form-step" id="step2">
     <h2 class="step-title">Choose a category</h2>
-    <p class="step-desc">Select the category and subcategory that best fit your item.</p>
+    <p class="step-desc">Select the category, group and subcategory.</p>
     
     <div class="form-group">
       <label class="form-label">Category <span class="required">*</span></label>
       <select id="category" class="form-select">
         <option value="">Select a category</option>
-        <option value="school">🎓 School Features</option>
         <option value="electronics">💻 Electronics</option>
+        <option value="school">🎓 School Features</option>
         <option value="furniture">🪑 Furniture</option>
-        <option value="food">🍱 Food & Collation</option>
-        <option value="dress">👗 Dress</option>
-        <option value="sport">⚽ Sport Equipment</option>
+        <option value="food">🍱 Food & Snacks</option>
+        <option value="dress">👗 Fashion</option>
+        <option value="sport">⚽ Sports</option>
         <option value="beauty">💄 Beauty</option>
       </select>
+      <div class="error-message" id="categoryError">Please select a category</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Group <span class="required">*</span></label>
+      <select id="group" class="form-select" disabled>
+        <option value="">First select a category</option>
+      </select>
+      <div class="error-message" id="groupError">Please select a group</div>
     </div>
     
     <div class="form-group">
       <label class="form-label">Subcategory <span class="required">*</span></label>
       <select id="subcategory" class="form-select" disabled>
-        <option value="">First select a category</option>
+        <option value="">First select a group</option>
       </select>
+      <div class="error-message" id="subcategoryError">Please select a subcategory</div>
     </div>
     
     <div class="btn-nav">
@@ -351,25 +385,21 @@
     </div>
   </div>
 
-  <!-- Étape 3 : Prix et Stock -->
+  <!-- Step 3 : Price & Stock -->
   <div class="form-step" id="step3">
     <h2 class="step-title">Set your price</h2>
-    <p class="step-desc">Be competitive and fair to attract more buyers.</p>
+    <p class="step-desc">Be competitive to attract buyers.</p>
     
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Price (GHS) <span class="required">*</span></label>
         <input type="number" id="price" class="form-input" placeholder="e.g., 150" min="0.01" step="0.01">
+        <div class="error-message" id="priceError">Please enter a valid price</div>
       </div>
       <div class="form-group">
-        <label class="form-label">MOQ (Minimum Order Quantity)</label>
-        <input type="number" id="moq" class="form-input" placeholder="e.g., 1" min="1" value="1">
+        <label class="form-label">Stock Quantity</label>
+        <input type="number" id="stock" class="form-input" placeholder="How many?" min="1" value="1">
       </div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Stock Quantity</label>
-      <input type="number" id="stock" class="form-input" placeholder="How many available?" min="1" value="1">
     </div>
     
     <div class="btn-nav">
@@ -378,22 +408,20 @@
     </div>
   </div>
 
-  <!-- Étape 4 : Photos -->
+  <!-- Step 4 : Photos -->
   <div class="form-step" id="step4">
     <h2 class="step-title">Add photos</h2>
-    <p class="step-desc">Upload clear photos of your item. The first photo will be the cover.</p>
+    <p class="step-desc">Upload clear photos. The first will be the cover.</p>
     
     <div class="form-group">
       <div id="imageUploadArea" class="image-upload-area">
         <i class="fa-solid fa-cloud-upload-alt" style="font-size:2rem;color:var(--primary)"></i>
         <p>Click or drag images here</p>
-        <small>Supports: JPG, PNG, WebP, or image URLs</small>
+        <small>Supports: JPG, PNG, WebP</small>
         <input type="file" id="imageFileInput" multiple accept="image/*" style="display:none">
       </div>
       <div class="image-preview" id="imagePreview"></div>
-      <small class="form-hint" style="display:block;margin-top:8px;color:var(--text-muted)">
-        You can also paste image URLs. First image becomes cover.
-      </small>
+      <div class="error-message" id="imageError">Please add at least one photo</div>
     </div>
     
     <div class="btn-nav">
@@ -402,14 +430,12 @@
     </div>
   </div>
 
-  <!-- Étape 5 : Review -->
+  <!-- Step 5 : Review -->
   <div class="form-step" id="step5">
     <h2 class="step-title">Review your listing</h2>
     <p class="step-desc">Check everything before publishing.</p>
     
-    <div id="reviewContent" style="background:var(--gray-light);border-radius:12px;padding:20px;margin-bottom:20px">
-      <!-- Dynamically filled -->
-    </div>
+    <div id="reviewContent" style="background:var(--gray-light);border-radius:12px;padding:20px;margin-bottom:20px"></div>
     
     <div class="btn-nav">
       <button class="btn-prev" data-prev="4">← Previous</button>
@@ -418,110 +444,266 @@
   </div>
 
 </div>
-<script src="/assets/js/config.js"></script>
-<script src="/assets/js/mega-menu.js"></script>
-<script src="/assets/js/modules/auth.js"></script>
-<script src="/assets/js/modules/product.js"></script>
-<script src="/assets/js/components-loader.js" type="module"></script>
 
-<script>   
+<script src="/assets/js/config.js"></script>
+
+<script>
 (function() {
-  // Guard: must be logged in
-  const user = Auth.guard();
-  if (!user) return;
+  const API_URL = window.APP_CONFIG?.API_URL || 'https://avena-backend-os8d.onrender.com';
   
-  // Subcategories mapping (based on mega menu)
-  const SUBCATEGORIES = {
-    school: ['Fournitures', 'Sacs & Transport', 'Livres & Docs', 'Impression'],
-    electronics: ['Ordinateurs', 'Audio', 'Téléphones', 'Câbles & Adaptateurs'],
-    furniture: ['Bureau', 'Chambre', 'Rangement', 'Déco'],
-    food: ['Snacks', 'Boissons', 'Repas rapides', 'Cuisine dorm'],
-    dress: ['Femmes', 'Hommes', 'Chaussures', 'Accessoires'],
-    sport: ['Sports collectifs', 'Fitness', 'Running', 'Natation'],
-    beauty: ['Soin du visage', 'Maquillage', 'Cheveux', 'Corps & Parfums']
+  // Categories structure (3 levels - English version)
+  const CATEGORIES_CONFIG = {
+    school: {
+      label: 'School Features',
+      groups: {
+        'Supplies': ['Notebooks & Binders', 'Pens & Pencils', 'Calculators', 'Rulers & Geometry', 'Sticky Notes & Highlighters'],
+        'Bags & Transport': ['Backpacks', 'School Bags', 'Pencil Cases', 'Document Holders'],
+        'Books & Docs': ['Textbooks', 'Dictionaries', 'Planners & Agendas', 'Flashcards'],
+        'Printing': ['Course Printing', 'Thesis Binding', 'A4 Paper']
+      }
+    },
+    electronics: {
+      label: 'Electronics',
+      groups: {
+        'Computers': ['Computers', 'Laptops', 'Tablets', 'Chromebooks', 'PC Accessories'],
+        'Audio': ['Audio', 'Headphones', 'Headsets', 'Bluetooth Speakers', 'Microphones'],
+        'Phones': ['Smartphones', 'Cases & Protection', 'Chargers', 'Power Banks'],
+        'Cables & Adapters': ['USB-C / USB-A', 'HDMI', 'USB Hubs']
+      }
+    },
+    furniture: {
+      label: 'Furniture',
+      groups: {
+        'Desk': ['Desks', 'Office Chairs', 'Desk Lamps', 'Organizers'],
+        'Bedroom': ['Beds & Mattresses', 'Bookcases', 'Shelves', 'Mirrors'],
+        'Storage': ['Wardrobes', 'Storage Boxes', 'Hangers'],
+        'Decor': ['Cushions & Throws', 'Wall Art & Posters', 'Rugs']
+      }
+    },
+    food: {
+      label: 'Food & Snacks',
+      groups: {
+        'Snacks': ['Cookies & Cakes', 'Chips & Crackers', 'Dried Fruits & Nuts', 'Cereal Bars'],
+        'Drinks': ['Water & Juice', 'Coffee & Tea', 'Energy Drinks', 'Smoothies'],
+        'Fast Food': ['Ready Meals', 'Instant Soups', 'Sandwiches'],
+        'Dorm Kitchen': ['Spices & Sauces', 'Rice & Pasta', 'Canned Food']
+      }
+    },
+    dress: {
+      label: 'Fashion',
+      groups: {
+        'Women': ['Dresses & Skirts', 'T-Shirts & Tops', 'Jeans & Pants', 'Jackets & Hoodies'],
+        'Men': ['T-Shirts & Polos', 'Jeans & Shorts', 'Shirts', 'Hoodies & Sweats'],
+        'Shoes': ['Sneakers', 'Sandals', 'Loafers'],
+        'Accessories': ['Caps & Beanies', 'Belts', 'Watches']
+      }
+    },
+    sport: {
+      label: 'Sports',
+      groups: {
+        'Team Sports': ['Football', 'Basketball', 'Volleyball', 'Rugby'],
+        'Fitness': ['Yoga Mats', 'Dumbbells', 'Resistance Bands', 'Jump Ropes'],
+        'Running': ['Running Shoes', 'Armbands & GPS', 'Running Gear'],
+        'Swimming': ['Swimsuits', 'Swim Goggles', 'Swim Caps']
+      }
+    },
+    beauty: {
+      label: 'Beauty',
+      groups: {
+        'Face Care': ['Moisturizers', 'Cleansers', 'Masks & Serums', 'SPF & Protection'],
+        'Makeup': ['Foundation', 'Lipsticks', 'Mascara & Eyeliner', 'Eyeshadow Palettes'],
+        'Hair': ['Shampoos', 'Hair Oils', 'Hair Accessories'],
+        'Body & Fragrance': ['Deodorants', 'Perfumes', 'Body Lotions']
+      }
+    }
   };
+
+  // DOM Elements
+  const titleInput = document.getElementById('title');
+  const descInput = document.getElementById('description');
+  const priceInput = document.getElementById('price');
+  const stockInput = document.getElementById('stock');
+  const categorySelect = document.getElementById('category');
+  const groupSelect = document.getElementById('group');
+  const subcategorySelect = document.getElementById('subcategory');
+  const submitBtn = document.getElementById('submitBtn');
   
-  // Variables
-  let currentStep = 1;
   let condition = 'new';
   let imageUrls = [];
-  let editMode = false;
-  let editId = null;
+  let currentStep = 1;
   
-  // Elements
-  const steps = document.querySelectorAll('.step');
-  const formSteps = document.querySelectorAll('.form-step');
-  const categorySelect = document.getElementById('category');
-  const subcategorySelect = document.getElementById('subcategory');
-  const conditionOptions = document.querySelectorAll('.condition-option');
-  const imageUploadArea = document.getElementById('imageUploadArea');
-  const imageFileInput = document.getElementById('imageFileInput');
-  const imagePreview = document.getElementById('imagePreview');
-  const reviewContent = document.getElementById('reviewContent');
-  
-  // Check edit mode
-  const params = new URLSearchParams(window.location.search);
-  editId = params.get('edit');
-  if (editId) {
-    editMode = true;
-    document.title = 'Edit Product — Avena';
-    loadProductForEdit(editId);
-  }
-  
-  // Load product data for edit mode
-  async function loadProductForEdit(id) {
-    const product = await Products.getById(id);
-    if (product && product.seller?.id === user.id) {
-      document.getElementById('title').value = product.title;
-      document.getElementById('description').value = product.description;
-      condition = product.condition || 'new';
-      updateConditionUI();
-      categorySelect.value = product.category;
-      updateSubcategories(product.category);
-      setTimeout(() => {
-        subcategorySelect.value = product.subcategory;
-      }, 50);
-      document.getElementById('price').value = product.price;
-      document.getElementById('moq').value = product.moq || 1;
-      document.getElementById('stock').value = product.stock || 1;
-      imageUrls = [...(product.images || [])];
-      renderImagePreview();
+  // Update groups
+  function updateGroups() {
+    const categoryKey = categorySelect.value;
+    const category = CATEGORIES_CONFIG[categoryKey];
+    
+    groupSelect.innerHTML = '<option value="">Select a group</option>';
+    subcategorySelect.innerHTML = '<option value="">First select a group</option>';
+    subcategorySelect.disabled = true;
+    
+    if (!category) {
+      groupSelect.disabled = true;
+      return;
     }
-  }
-  
-  // Update condition UI
-  function updateConditionUI() {
-    conditionOptions.forEach(opt => {
-      const val = opt.dataset.condition;
-      if (val === condition) opt.classList.add('selected');
-      else opt.classList.remove('selected');
+    
+    groupSelect.disabled = false;
+    Object.keys(category.groups).forEach(groupName => {
+      const option = document.createElement('option');
+      option.value = groupName;
+      option.textContent = groupName;
+      groupSelect.appendChild(option);
     });
   }
   
-  conditionOptions.forEach(opt => {
-    opt.addEventListener('click', () => {
-      condition = opt.dataset.condition;
-      updateConditionUI();
-    });
-  });
-  
-  // Update subcategories based on selected category
-  function updateSubcategories(category) {
-    const subs = SUBCATEGORIES[category] || [];
+  // Update subcategories
+  function updateSubcategories() {
+    const categoryKey = categorySelect.value;
+    const groupName = groupSelect.value;
+    const category = CATEGORIES_CONFIG[categoryKey];
+    
     subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
-    subs.forEach(sub => {
-      subcategorySelect.innerHTML += `<option value="${sub}">${sub}</option>`;
+    
+    if (!category || !groupName || !category.groups[groupName]) {
+      subcategorySelect.disabled = true;
+      return;
+    }
+    
+    subcategorySelect.disabled = false;
+    category.groups[groupName].forEach(sub => {
+      const option = document.createElement('option');
+      option.value = sub;
+      option.textContent = sub;
+      subcategorySelect.appendChild(option);
     });
-    subcategorySelect.disabled = subs.length === 0;
   }
   
   categorySelect.addEventListener('change', () => {
-    updateSubcategories(categorySelect.value);
+    updateGroups();
+    clearError('categoryError');
   });
   
-  // Image upload handling
-  imageUploadArea.addEventListener('click', () => imageFileInput.click());
+  groupSelect.addEventListener('change', () => {
+    updateSubcategories();
+    clearError('groupError');
+  });
   
+  subcategorySelect.addEventListener('change', () => {
+    clearError('subcategoryError');
+  });
+  
+  // Condition
+  document.querySelectorAll('.condition-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.condition-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      condition = opt.dataset.condition;
+    });
+  });
+  
+  // Counters
+  titleInput.addEventListener('input', () => {
+    document.getElementById('titleCounter').textContent = `${titleInput.value.length}/100`;
+    if (titleInput.value.length >= 5) clearError('titleError');
+  });
+  
+  descInput.addEventListener('input', () => {
+    document.getElementById('descCounter').textContent = `${descInput.value.length}/2000`;
+    if (descInput.value.length >= 20) clearError('descError');
+  });
+  
+  // Validation
+  function validateStep(step) {
+    if (step === 1) {
+      if (titleInput.value.trim().length < 5) {
+        showError('titleError');
+        return false;
+      }
+      if (descInput.value.trim().length < 20) {
+        showError('descError');
+        return false;
+      }
+    }
+    if (step === 2) {
+      if (!categorySelect.value) {
+        showError('categoryError');
+        return false;
+      }
+      if (!groupSelect.value) {
+        showError('groupError');
+        return false;
+      }
+      if (!subcategorySelect.value) {
+        showError('subcategoryError');
+        return false;
+      }
+    }
+    if (step === 3) {
+      const price = parseFloat(priceInput.value);
+      if (isNaN(price) || price <= 0) {
+        showError('priceError');
+        return false;
+      }
+    }
+    if (step === 4) {
+      if (imageUrls.length === 0) {
+        showError('imageError');
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  // Navigation
+  function showStep(step) {
+    currentStep = step;
+    for (let i = 1; i <= 5; i++) {
+      const stepDiv = document.getElementById(`step${i}`);
+      const stepIndicator = document.querySelector(`.step[data-step="${i}"]`);
+      if (stepDiv) stepDiv.classList.toggle('active-step', i === step);
+      if (stepIndicator) {
+        stepIndicator.classList.toggle('active', i === step);
+        stepIndicator.classList.toggle('completed', i < step);
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  document.querySelectorAll('.btn-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nextStep = parseInt(btn.dataset.next);
+      if (validateStep(currentStep)) {
+        if (nextStep === 5) updateReview();
+        showStep(nextStep);
+      }
+    });
+  });
+  
+  document.querySelectorAll('.btn-prev').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prevStep = parseInt(btn.dataset.prev);
+      showStep(prevStep);
+    });
+  });
+  
+  // Review
+  function updateReview() {
+    const categoryText = categorySelect.options[categorySelect.selectedIndex]?.text || '';
+    document.getElementById('reviewContent').innerHTML = `
+      <div style="display:grid;gap:12px">
+        <div><strong>Title:</strong> ${escapeHtml(titleInput.value)}</div>
+        <div><strong>Description:</strong> ${escapeHtml(descInput.value.substring(0, 150))}${descInput.value.length > 150 ? '...' : ''}</div>
+        <div><strong>Condition:</strong> ${condition === 'new' ? 'Brand New' : 'Used - Good'}</div>
+        <div><strong>Category:</strong> ${escapeHtml(categoryText)}</div>
+        <div><strong>Group:</strong> ${escapeHtml(groupSelect.value)}</div>
+        <div><strong>Subcategory:</strong> ${escapeHtml(subcategorySelect.value)}</div>
+        <div><strong>Price:</strong> GHS ${parseFloat(priceInput.value).toFixed(2)}</div>
+        <div><strong>Stock:</strong> ${stockInput.value} available</div>
+        <div><strong>Photos:</strong> ${imageUrls.length} image(s) uploaded</div>
+      </div>
+    `;
+  }
+  
+  // Images
   function readFileAsDataURL(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -530,11 +712,10 @@
     });
   }
   
-  function addImage(url) {
-    if (url && !imageUrls.includes(url)) {
-      imageUrls.push(url);
-      renderImagePreview();
-    }
+  async function addImage(file) {
+    const dataUrl = await readFileAsDataURL(file);
+    imageUrls.push(dataUrl);
+    renderImagePreview();
   }
   
   function removeImage(index) {
@@ -543,7 +724,8 @@
   }
   
   function renderImagePreview() {
-    imagePreview.innerHTML = imageUrls.map((url, i) => `
+    const container = document.getElementById('imagePreview');
+    container.innerHTML = imageUrls.map((url, i) => `
       <div class="preview-item">
         <img src="${url}" alt="Preview ${i+1}">
         <button class="preview-remove" data-index="${i}">✕</button>
@@ -551,164 +733,84 @@
       </div>
     `).join('');
     
-    // Add remove listeners
     document.querySelectorAll('.preview-remove').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         removeImage(parseInt(btn.dataset.index));
       });
     });
+    
+    if (imageUrls.length > 0) clearError('imageError');
   }
   
-  imageFileInput.addEventListener('change', async (e) => {
+  const uploadArea = document.getElementById('imageUploadArea');
+  const fileInput = document.getElementById('imageFileInput');
+  
+  uploadArea.addEventListener('click', () => fileInput.click());
+  
+  fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
     for (const file of files) {
-      const dataUrl = await readFileAsDataURL(file);
-      addImage(dataUrl);
+      await addImage(file);
     }
-    imageFileInput.value = '';
+    fileInput.value = '';
   });
   
-  // Allow pasting image URLs
-  document.addEventListener('paste', (e) => {
-    const text = e.clipboardData?.getData('text');
-    if (text && text.match(/^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)/i)) {
-      addImage(text);
-      e.preventDefault();
-    }
-  });
-  
-  // Navigation between steps
-  function showStep(step) {
-    currentStep = step;
-    formSteps.forEach((fs, i) => {
-      if (i + 1 === step) fs.classList.add('active-step');
-      else fs.classList.remove('active-step');
-    });
-    steps.forEach((s, i) => {
-      if (i + 1 === step) s.classList.add('active');
-      else s.classList.remove('active');
-      if (i + 1 < step) s.classList.add('completed');
-      else s.classList.remove('completed');
-    });
+  // Alerts
+  function showError(errorId) {
+    document.getElementById(errorId).classList.add('show');
   }
   
-  document.querySelectorAll('.btn-next').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const nextStep = parseInt(btn.dataset.next);
-      if (validateStep(currentStep)) {
-        showStep(nextStep);
-        if (nextStep === 5) updateReview();
-      }
-    });
-  });
-  
-  document.querySelectorAll('.btn-prev').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const prevStep = parseInt(btn.dataset.prefix);
-      showStep(prevStep);
-    });
-  });
-  
-  // Validation per step
-  function validateStep(step) {
-    const alertError = document.getElementById('alertError');
-    alertError.classList.remove('show');
-    
-    if (step === 1) {
-      const title = document.getElementById('title').value.trim();
-      const desc = document.getElementById('description').value.trim();
-      if (!title) { alertError.textContent = 'Please enter a product title.'; alertError.classList.add('show'); return false; }
-      if (title.length < 5) { alertError.textContent = 'Title must be at least 5 characters.'; alertError.classList.add('show'); return false; }
-      if (!desc) { alertError.textContent = 'Please enter a description.'; alertError.classList.add('show'); return false; }
-      if (desc.length < 20) { alertError.textContent = 'Description must be at least 20 characters.'; alertError.classList.add('show'); return false; }
-    }
-    
-    if (step === 2) {
-      const category = categorySelect.value;
-      const subcategory = subcategorySelect.value;
-      if (!category) { alertError.textContent = 'Please select a category.'; alertError.classList.add('show'); return false; }
-      if (!subcategory) { alertError.textContent = 'Please select a subcategory.'; alertError.classList.add('show'); return false; }
-    }
-    
-    if (step === 3) {
-      const price = parseFloat(document.getElementById('price').value);
-      if (isNaN(price) || price <= 0) { alertError.textContent = 'Please enter a valid price.'; alertError.classList.add('show'); return false; }
-    }
-    
-    if (step === 4) {
-      if (imageUrls.length === 0) {
-        alertError.textContent = 'Please add at least one photo of your item.';
-        alertError.classList.add('show');
-        return false;
-      }
-    }
-    
-    return true;
+  function clearError(errorId) {
+    const el = document.getElementById(errorId);
+    if (el) el.classList.remove('show');
   }
   
-  // Update review step
-  function updateReview() {
-    const title = document.getElementById('title').value;
-    const desc = document.getElementById('description').value;
-    const category = categorySelect.options[categorySelect.selectedIndex]?.text || '';
-    const subcategory = subcategorySelect.value;
-    const price = document.getElementById('price').value;
-    const moq = document.getElementById('moq').value;
-    const stock = document.getElementById('stock').value;
-    
-    reviewContent.innerHTML = `
-      <div style="display:grid;gap:12px">
-        <div><strong>Title:</strong> ${escapeHtml(title)}</div>
-        <div><strong>Description:</strong> ${escapeHtml(desc.substring(0, 150))}${desc.length > 150 ? '...' : ''}</div>
-        <div><strong>Condition:</strong> ${condition === 'new' ? 'Brand New' : 'Used - Good'}</div>
-        <div><strong>Category:</strong> ${escapeHtml(category)} › ${escapeHtml(subcategory)}</div>
-        <div><strong>Price:</strong> GHS ${parseFloat(price).toFixed(2)}</div>
-        <div><strong>MOQ:</strong> ${moq} piece(s)</div>
-        <div><strong>Stock:</strong> ${stock} available</div>
-        <div><strong>Photos:</strong> ${imageUrls.length} image(s) uploaded (first is cover)</div>
-      </div>
-    `;
+  function showAlert(message, type) {
+    const alertEl = document.getElementById(`alert${type === 'error' ? 'Error' : 'Success'}`);
+    alertEl.textContent = message;
+    alertEl.classList.add('show');
+    setTimeout(() => alertEl.classList.remove('show'), 5000);
   }
   
   // Submit
-  // Submit
-  document.getElementById('submitBtn').addEventListener('click', async () => {
-    if (!validateStep(4)) return;
-    
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Publishing...';
-    
-    const token = sessionStorage.getItem('avena_token');
-    if (!token) {
-      document.getElementById('alertError').textContent = 'You must be logged in.';
-      document.getElementById('alertError').classList.add('show');
-      btn.disabled = false;
-      btn.textContent = '🚀 Publish Listing';
+  submitBtn.addEventListener('click', async () => {
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3) || !validateStep(4)) {
+      showAlert('Please complete all required fields.', 'error');
       return;
     }
     
-    const data = {
-      title: document.getElementById('title').value.trim(),
-      description: document.getElementById('description').value.trim(),
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Publishing...';
+    
+    const token = sessionStorage.getItem('avena_token');
+    if (!token) {
+      showAlert('You must be logged in.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '🚀 Publish Listing';
+      return;
+    }
+    
+    const productData = {
+      title: titleInput.value.trim(),
+      description: descInput.value.trim(),
       condition: condition,
       category: categorySelect.value,
+      group: groupSelect.value,
       subcategory: subcategorySelect.value,
-      price: parseFloat(document.getElementById('price').value),
-      moq: parseInt(document.getElementById('moq').value) || 1,
-      stock: parseInt(document.getElementById('stock').value) || 1,
+      price: parseFloat(priceInput.value),
+      stock: parseInt(stockInput.value) || 1,
       images: imageUrls
     };
     
     try {
-      const response = await fetch('https://avena-backend-os8d.onrender.com/api/products', {
+      const response = await fetch(`${API_URL}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(productData)
       });
       
       const result = await response.json();
@@ -717,26 +819,23 @@
         throw new Error(result.error || 'Failed to create product');
       }
       
-      document.getElementById('alertSuccess').textContent = 'Product created! Redirecting...';
-      document.getElementById('alertSuccess').classList.add('show');
+      showAlert('Product published successfully! Redirecting...', 'success');
       
       setTimeout(() => {
         window.location.href = `/pages/product.html?id=${result.product.id}`;
       }, 1500);
       
     } catch (error) {
-      document.getElementById('alertError').textContent = error.message;
-      document.getElementById('alertError').classList.add('show');
-      btn.disabled = false;
-      btn.textContent = '🚀 Publish Listing';
+      console.error('Submit error:', error);
+      showAlert(error.message, 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '🚀 Publish Listing';
     }
   });
-//comenter
-
   
   function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
+    return str.replace(/[&<>]/g, (m) => {
       if (m === '&') return '&amp;';
       if (m === '<') return '&lt;';
       if (m === '>') return '&gt;';
@@ -744,10 +843,9 @@
     });
   }
   
+  // Initialization
+  updateGroups();
 })();
 </script>
-    <script src="assets/js/mega-menu.js"></script>
-    <script src="assets/js/modules/product-grid.js"></script>
-    <script src="assets/js/components-loader.js" type="module"></script>
 </body>
 </html>

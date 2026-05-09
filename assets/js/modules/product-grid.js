@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * ============================================================
  *  AVENA — ProductGrid Component (API + Pagination)
  *  assets/js/modules/product-grid.js
@@ -100,14 +100,14 @@ class ProductGrid {
     
     this.container.innerHTML = `
       <div class="pg-header">
-        <h2 class="pg-title">Produits recommandés pour vous</h2>
+        <h2 class="pg-title">Products recommended for you</h2>
         <div class="pg-controls">
           <select class="pg-sort" id="pg-sort">
-            <option value="created_at">Nouveautés</option>
-            <option value="price">Prix croissant</option>
-            <option value="price_desc">Prix décroissant</option>
-            <option value="views">Les plus vus</option>
-            <option value="likes">Les plus aimés</option>
+            <option value="created_at">New</option>
+            <option value="price">from the expensive</option>
+            <option value="price_desc">from the lower</option>
+            <option value="views">must sell</option>
+            <option value="likes">msut liked</option>
           </select>
         </div>
       </div>

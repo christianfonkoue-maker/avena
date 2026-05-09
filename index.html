@@ -6,9 +6,48 @@
     <title>Avena — Campus Marketplace</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components/promo-grid.css">
 </head>
 <body>
     <!-- Header est injecté automatiquement -->
+
+   <avenna-promo-grid id="promoGrid"></avenna-promo-grid>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const promoGrid = document.getElementById('promoGrid');
+    if (promoGrid) {
+      promoGrid.setAttribute('data-config', JSON.stringify({
+        "leftFrames": [
+          {"image": "https://picsum.photos/id/20/400/500", "tag": "HOT SELLERS", "title": "GRAD", "category": "school"},
+          {"image": "https://picsum.photos/id/26/400/500", "tag": "NEW ARRIVALS", "title": "Enter your\ngraduation era", "category": "school"},
+          {"image": "https://picsum.photos/id/30/400/500", "tag": "", "title": "New In", "category": "dress"}
+        ],
+        "rightFrames": [
+          {"image": "https://picsum.photos/id/15/400/500", "tag": "OWN THE MOMENT", "title": "Home & Decor", "price": "$14.75", "category": "furniture"},
+          {"image": "https://picsum.photos/id/82/400/500", "tag": "MOTF", "title": "Women", "category": "dress"},
+          {"image": "https://picsum.photos/id/96/400/500", "tag": "", "title": "Curve", "category": "dress"}
+        ],
+        "carouselImages": [
+          {"image": "https://picsum.photos/id/10/800/1000", "title": "Summer Sale", "tag": "LIMITED TIME", "price": "Up to 50% OFF", "link": "electronics"},
+          {"image": "https://picsum.photos/id/12/800/1000", "title": "New Collection", "tag": "JUST ARRIVED", "price": "Shop Now", "link": "dress"},
+          {"image": "https://picsum.photos/id/18/800/1000", "title": "Student Discount", "tag": "BACK TO SCHOOL", "price": "20% OFF", "link": "school"},
+          {"image": "https://picsum.photos/id/24/800/1000", "title": "Home Essentials", "tag": "COZY LIVING", "price": "Free Shipping", "link": "furniture"},
+          {"image": "https://picsum.photos/id/41/800/1000", "title": "Sport Gear", "tag": "ACTIVE LIFE", "price": "Up to 40% OFF", "link": "sport"}
+        ],
+        "circles": [
+          {"image": "https://picsum.photos/id/20/200/200", "title": "Home & Decor", "subtitle": "New collection", "category": "furniture"},
+          {"image": "https://picsum.photos/id/82/200/200", "title": "MOTF", "subtitle": "Women", "category": "dress"},
+          {"image": "https://picsum.photos/id/96/200/200", "title": "Curve", "subtitle": "Plus size", "category": "dress"},
+          {"image": "https://picsum.photos/id/26/200/200", "title": "Kids", "subtitle": "Baby & Maternity", "category": "dress"},
+          {"image": "https://picsum.photos/id/30/200/200", "title": "Men's", "subtitle": "Clothing", "category": "dress"},
+          {"image": "https://picsum.photos/id/15/200/200", "title": "Accessories", "subtitle": "Jewelry & More", "category": "electronics"}
+        ]
+      }));
+    }
+  });
+</script>
+
     
     <div id="product-grid-home" data-pg-source="mock" data-pg-limit="24"></div>
         <!-- Après la grille -->

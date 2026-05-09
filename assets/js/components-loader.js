@@ -8,6 +8,7 @@
 import './components/avenna-header.js';
 import './components/avenna-footer.js';
 import './components/avenna-modal.js';
+import './components/avenna-promo-grid.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Injecter le header s'il n'est pas déjà dans le HTML
